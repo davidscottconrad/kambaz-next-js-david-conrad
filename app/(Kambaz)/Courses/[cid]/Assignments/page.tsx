@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Modules() {
     return (
         <div>
@@ -9,32 +11,33 @@ export default function Modules() {
                 <h3 id="wd-assignments-title">
                     ASSIGNMENTS 40% of Total <button>+</button> </h3>
                 <ul id="wd-assignment-list">
-                    <li className="wd-assignment-list-item">
-                        <a href="/Courses/1234/Assignments/123"
-                            className="wd-assignment-link" >
+                    <li id="wd-assignment-list-item">
+
+                        <Link href="/Courses/1234/Assignments/123"
+                            id="wd-assignment-link" >
                             A1 - ENV + HTML
-                        </a>
+                        </Link>
                         <p>
                             Multiple Modules | Not Available until May 6 at 12:00am
                             | Due May 13 at 11:59pm | 100pts
                         </p>
                     </li>
-                    <li className="wd-assignment-list-item">
-                        <a href="/Courses/1234/Assignments/1234"
-                            className="wd-assignment-link" >
+                    <li id="wd-assignment-list-item">
+                        <Link href="/Courses/1234/Assignments/1234"
+                            id="wd-assignment-link" >
                             A2 - CSS + Bootstrap
-                        </a>
+                        </Link>
 
                         <p>
                             Multiple Modules | Not Available until May 13 at 12:00am
                             | Due May 20 at 11:59pm | 100pts
                         </p>
                     </li>
-                    <li className="wd-assignment-list-item">
-                        <a href="/Courses/1234/Assignments/1235"
-                            className="wd-assignment-link" >
+                    <li id="wd-assignment-list-item">
+                        <Link href="/Courses/1234/Assignments/1235"
+                            id="wd-assignment-link" >
                             A3 - JS + React
-                        </a>
+                        </Link>
                         <p>
                             Multiple Modules | Not Available until May 20 at 12:00am
                             | Due May 27 at 11:59pm | 100pts

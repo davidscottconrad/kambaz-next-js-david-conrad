@@ -6,6 +6,8 @@ export default function Lab2() {
         <div>
             <TOC />
             <h2>Lab 2</h2>
+
+            <h3>intro to css</h3>
         </div>
     );
 }
