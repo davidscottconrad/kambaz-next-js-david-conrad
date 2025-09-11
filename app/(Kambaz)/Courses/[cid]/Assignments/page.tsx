@@ -13,7 +13,7 @@ export default function Modules() {
                 <ul id="wd-assignment-list">
                     <li id="wd-assignment-list-item">
 
-                        <Link href="/Courses/1234/Assignments/123"
+                        <Link href="/Courses/1234/Assignments/123/Editor"
                             id="wd-assignment-link" >
                             A1 - ENV + HTML
                         </Link>
@@ -23,7 +23,7 @@ export default function Modules() {
                         </p>
                     </li>
                     <li id="wd-assignment-list-item">
-                        <Link href="/Courses/1234/Assignments/1234"
+                        <Link href="/Courses/1234/Assignments/1234/Editor"
                             id="wd-assignment-link" >
                             A2 - CSS + Bootstrap
                         </Link>
@@ -34,7 +34,7 @@ export default function Modules() {
                         </p>
                     </li>
                     <li id="wd-assignment-list-item">
-                        <Link href="/Courses/1234/Assignments/1235"
+                        <Link href="/Courses/1234/Assignments/1235/Editor"
                             id="wd-assignment-link" >
                             A3 - JS + React
                         </Link>
