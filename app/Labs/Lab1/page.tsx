@@ -25,6 +25,22 @@ export default function Lab1() {
                 </ol>
             </div>
 
+            <div>
+                <h5>Unordered List Tag</h5>
+                <ul>
+                    <li>the name of the wind</li>
+                    <li>the will of the many</li>
+                    <li>Harry Potter: The Prisoner of Azkaban</li>
+                    <li>the hobbit</li>
+                    <li>the lord of the rings</li>
+                    <li>the way of kings</li>
+                    <li>words of radiance</li>
+                    <li>the final empire</li>
+                    <li>the well of ascension</li>
+                    <li>the hero of ages</li>
+                </ul>
+            </div>
+
             <h5>Steak, Corn on the Cob, and Mashed Potatoes</h5>
             <ol id="steak-corn-mashedpotatoes-recipe">
                 <h5>Serves 4</h5>
