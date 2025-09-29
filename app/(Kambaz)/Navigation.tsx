@@ -18,9 +18,9 @@ export default function KambazNavigation() {
       style={{ width: 120 }}
       id="wd-kambaz-navigation"
     >
-      {/* Logo */}
+
       <ListGroupItem
-        className="bg-black border-0 text-center"
+        className="bg-black border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center "
         as="a"
         href="/"
         id="wd-neu-link"
@@ -34,9 +34,8 @@ export default function KambazNavigation() {
       </ListGroupItem>
 
 
-      {/* Account */}
       <ListGroupItem
-        className={`border-0 text-center ${pathname.startsWith("/Account") ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname.startsWith("/Account") ? "bg-white" : "bg-black"
           }`}
         active={pathname.startsWith("/Account")}
       >
@@ -51,13 +50,13 @@ export default function KambazNavigation() {
               }`}
           />
 
-          Account
+          <div>Account</div>
         </Link>
       </ListGroupItem>
 
 
       <ListGroupItem
-        className={`border-0 text-center ${pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") ? "bg-white" : "bg-black"
           }`}
         active={pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") || pathname.startsWith("/Courses")}
       >
@@ -72,13 +71,13 @@ export default function KambazNavigation() {
               }`}
           />
 
-          Dashboard
+          <div>Dashboard</div>
         </Link>
       </ListGroupItem>
 
 
       <ListGroupItem
-        className={`border-0 text-center ${pathname === "/Calendar" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Calendar" ? "bg-white" : "bg-black"
           }`}
         active={pathname === "/Calendar"}
       >
@@ -93,12 +92,12 @@ export default function KambazNavigation() {
               }`}
           />
 
-          Calendar
+          <div>Calendar</div>
         </Link>
       </ListGroupItem>
 
       <ListGroupItem
-        className={`border-0 text-center ${pathname === "/Inbox" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Inbox" ? "bg-white" : "bg-black"
           }`}
         active={pathname === "/Inbox"}
       >
@@ -113,11 +112,11 @@ export default function KambazNavigation() {
               }`}
           />
 
-          Inbox
+          <div>Inbox</div>
         </Link>
       </ListGroupItem>
       <ListGroupItem
-        className={`border-0 text-center ${pathname === "/Settings" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Settings" ? "bg-white" : "bg-black"
           }`}
         active={pathname === "/Settings"}
       >
@@ -132,11 +131,11 @@ export default function KambazNavigation() {
               }`}
           />
 
-          Settings
+          <div>Settings</div>
         </Link>
       </ListGroupItem>
       <ListGroupItem
-        className={`border-0 text-center ${pathname === "/Settings" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname === "/Settings" ? "bg-white" : "bg-black"
           }`}
         active={pathname === "/Settings"}
       >
@@ -150,8 +149,10 @@ export default function KambazNavigation() {
             className={`fs-1 ${pathname === "/Labs" ? "text-danger" : "text-white"
               }`}
           />
+          <div>
 
-          Labs
+            Labs
+          </div>
         </Link>
       </ListGroupItem>
     </ListGroup>
