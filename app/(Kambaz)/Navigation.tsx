@@ -135,18 +135,18 @@ export default function KambazNavigation() {
         </Link>
       </ListGroupItem>
       <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname === "/Settings" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname === "/Labs" ? "bg-white" : "bg-black"
           }`}
         active={pathname === "/Settings"}
       >
         <Link
           href="/Labs"
           id="wd-labs-link"
-          className={`d-block text-decoration-none ${pathname === "/Labs" ? "text-danger" : "text-white"
+          className={`d-block text-decoration-none ${pathname.startsWith("/Labs") ? "text-danger" : "text-white"
             }`}
         >
           <LiaBookSolid
-            className={`fs-1 ${pathname === "/Labs" ? "text-danger" : "text-white"
+            className={`fs-1 ${pathname.startsWith("/Labs") ? "text-danger" : "text-white"
               }`}
           />
           <div>
