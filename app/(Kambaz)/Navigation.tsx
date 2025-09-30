@@ -20,7 +20,7 @@ export default function KambazNavigation() {
     >
 
       <ListGroupItem
-        className="bg-black border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center "
+        className="bg-black border-0 d-flex flex-col justify-content-center  mb-2 text-center "
         as="a"
         href="/"
         id="wd-neu-link"
@@ -135,9 +135,9 @@ export default function KambazNavigation() {
         </Link>
       </ListGroupItem>
       <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname === "/Labs" ? "bg-white" : "bg-black"
+        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname.startsWith("/Labs") ? "bg-white" : "bg-black"
           }`}
-        active={pathname === "/Settings"}
+        active={pathname.startsWith("/Labs")}
       >
         <Link
           href="/Labs"

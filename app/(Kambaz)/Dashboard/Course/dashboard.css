@@ -1,0 +1,16 @@
+#card-wrapper {
+    width: 250px;
+    height: 269px;
+
+}
+
+.color-div {
+    height: 150px;
+    background-color: #7070ff;
+}
+
+.card-title-dash {
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: bold;
+}
