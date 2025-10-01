@@ -1,27 +1,41 @@
 import Link from "next/link";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
-import ModulesControls from "../Modules/ModulesControls";
 import ModuleControlButtons from "../Modules/ModuleControlButtons";
-import LessonControlButtons from "../Modules/LessonControlButtons";
 import { Button } from "react-bootstrap";
 import { FaPlus, FaClipboardCheck } from "react-icons/fa6";
-import { InputGroup, Form } from "react-bootstrap";
+
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import AssignmentControls from "./AssignmentControls";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
+import InputGroupText from "react-bootstrap/InputGroupText";
 
 export default function Modules() {
     return (
         <div>
-
-            <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn">
-                <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                Assignment
-            </Button>
-            <Button variant="secondary" size="lg" className="me-1 float-end" id="wd-add-module-btn">
-                <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                Group
-            </Button>
+            <div className="d-flex justify-content-between align-items-center">
+                <InputGroup style={{ maxWidth: 420 }} className="p-3">
+                    <InputGroupText>
+                        <FaMagnifyingGlass />
+                    </InputGroupText>
+                    <Form.Control
+                        type="search"
+                        placeholder="Search for Assignment"
+                        aria-label="Search for Assignment"
+                    />
+                </InputGroup>
+                <div>
+                    <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn">
+                        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+                        Assignment
+                    </Button>
+                    <Button variant="secondary" size="lg" className="me-1 float-end" id="wd-add-module-btn">
+                        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+                        Group
+                    </Button>
+                </div>
+            </div>
             <br /><br /><br /><br />
             <ListGroup className="rounded-0" id="wd-modules">
                 <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
@@ -67,48 +81,7 @@ export default function Modules() {
                 </ListGroupItem>
             </ListGroup>
 
-            <div id="wd-assignments">
-                <input placeholder="Search for Assignments"
-                    id="wd-search-assignment" />
-                <button id="wd-add-assignment-group">+ Group</button>
-                <button id="wd-add-assignment">+ Assignment</button>
-                <h3 id="wd-assignments-title">
-                    ASSIGNMENTS 40% of Total <button>+</button> </h3>
-                <ul id="wd-assignment-list">
-                    <li id="wd-assignment-list-item">
 
-                        <Link href="/Courses/1234/Assignments/123/Editor"
-                            id="wd-assignment-link" >
-                            A1 - ENV + HTML
-                        </Link>
-                        <p>
-                            Multiple Modules | Not Available until May 6 at 12:00am
-                            | Due May 13 at 11:59pm | 100pts
-                        </p>
-                    </li>
-                    <li id="wd-assignment-list-item">
-                        <Link href="/Courses/1234/Assignments/1234/Editor"
-                            id="wd-assignment-link" >
-                            A2 - CSS + Bootstrap
-                        </Link>
-
-                        <p>
-                            Multiple Modules | Not Available until May 13 at 12:00am
-                            | Due May 20 at 11:59pm | 100pts
-                        </p>
-                    </li>
-                    <li id="wd-assignment-list-item">
-                        <Link href="/Courses/1234/Assignments/1235/Editor"
-                            id="wd-assignment-link" >
-                            A3 - JS + React
-                        </Link>
-                        <p>
-                            Multiple Modules | Not Available until May 20 at 12:00am
-                            | Due May 27 at 11:59pm | 100pts
-                        </p>
-                    </li>
-                </ul>
-            </div>
         </div>
     );
 }
