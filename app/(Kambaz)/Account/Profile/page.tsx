@@ -1,65 +1,119 @@
 import Link from "next/link";
+import { Form, Button, Row, Col } from "react-bootstrap";
 
 export default function Profile() {
   return (
-    <div id="wd-profile-screen">
-      <h3>Profile</h3>
+    <div id="wd-profile-screen" className="container mt-5">
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <h3 className="mb-4">Profile</h3>
+          <Form>
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-username">
+                Username:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-username"
+                  type="text"
+                  defaultValue="alice"
+                  placeholder="username"
+                  className="wd-username"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-username">Username:</label><br />
-      <input
-        id="wd-username"
-        defaultValue="alice"
-        placeholder="username"
-        className="wd-username"
-        type="text"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-password">
+                Password:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-password"
+                  type="password"
+                  defaultValue="123"
+                  placeholder="password"
+                  className="wd-password"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-password">Password:</label><br />
-      <input
-        id="wd-password"
-        defaultValue="123"
-        placeholder="password"
-        type="password"
-        className="wd-password"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-firstname">
+                First Name:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-firstname"
+                  type="text"
+                  defaultValue="Alice"
+                  placeholder="First Name"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-firstname">First Name:</label><br />
-      <input
-        defaultValue="Alice"
-        placeholder="First Name"
-        id="wd-firstname"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-lastname">
+                Last Name:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-lastname"
+                  type="text"
+                  defaultValue="Wonderland"
+                  placeholder="Last Name"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-lastname">Last Name:</label><br />
-      <input
-        defaultValue="Wonderland"
-        placeholder="Last Name"
-        id="wd-lastname"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-dob">
+                Date of Birth:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-dob"
+                  type="date"
+                  defaultValue="2000-01-01"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-dob">Date of Birth:</label><br />
-      <input
-        defaultValue="2000-01-01"
-        type="date"
-        id="wd-dob"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-email">
+                Email:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Control
+                  id="wd-email"
+                  type="email"
+                  defaultValue="alice@wonderland"
+                />
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-email">Email:</label><br />
-      <input
-        defaultValue="alice@wonderland"
-        type="email"
-        id="wd-email"
-      /><br /><br />
+            <Row className="mb-3">
+              <Form.Label column sm={3} htmlFor="wd-role">
+                Role:
+              </Form.Label>
+              <Col sm={9}>
+                <Form.Select id="wd-role" defaultValue="FACULTY">
+                  <option value="USER">User</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="FACULTY">Faculty</option>
+                  <option value="STUDENT">Student</option>
+                </Form.Select>
+              </Col>
+            </Row>
 
-      <label htmlFor="wd-role">Role:</label><br />
-      <select defaultValue="FACULTY" id="wd-role">
-        <option value="USER">User</option>
-        <option value="ADMIN">Admin</option>
-        <option value="FACULTY">Faculty</option>
-        <option value="STUDENT">Student</option>
-      </select><br /><br />
-
-      <Link href="Signin">Sign out</Link>
+            <Row>
+              <Col sm={12} className="text-center">
+                <Link href="Signin">Sign out</Link>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 }

@@ -50,7 +50,7 @@ export default function Modules() {
                         <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
                             <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
                             <div className="p-2">
-                                <div>A1</div>
+                                <div><Link href="/Courses/1234/Assignments/125/Editor">A1</Link></div>
                                 <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 6 at 12:00am | Due May 13 at 11:59pm | 100pts</div>
                             </div>
 
@@ -60,7 +60,7 @@ export default function Modules() {
                         <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
                             <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
                             <div className="p-2">
-                                <div>A2</div>
+                                <div><Link href="/Courses/1234/Assignments/15/Editor">A2</Link></div>
                                 <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 7 at 12:00am | Due May 16 at 11:59pm | 100pts</div>
                             </div>
 
@@ -70,7 +70,7 @@ export default function Modules() {
                         <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
                             <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
                             <div className="p-2">
-                                <div>A3</div>
+                                <div><Link href="/Courses/1234/Assignments/1235/Editor">A3</Link></div>
                                 <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 8 at 12:00am | Due May 18 at 11:59pm | 100pts</div>
                             </div>
 
@@ -85,3 +85,4 @@ export default function Modules() {
         </div>
     );
 }
+
