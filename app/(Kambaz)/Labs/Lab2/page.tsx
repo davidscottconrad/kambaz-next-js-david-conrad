@@ -22,7 +22,7 @@ import BootstrapNavigation from "./BootstrapNavigation";
 
 export default function Lab2() {
     return (
-        <Container className="mt-5 mb-5">
+        <Container className="mt-5 mb-5 p-2">
             <div id="wd-lab2">
                 <h2>Lab 2 - Cascading Style Sheets</h2>
                 <h3>Styling with the STYLE attribute</h3>

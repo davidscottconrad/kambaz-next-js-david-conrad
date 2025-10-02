@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Form, Button, Row, Col } from "react-bootstrap";
-
+import AccountNavigation from "../Navigation";
 export default function Profile() {
   return (
     <div id="wd-profile-screen" className="container mt-5">
+      <AccountNavigation />
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
           <h3 className="mb-4">Profile</h3>
@@ -106,9 +107,17 @@ export default function Profile() {
               </Col>
             </Row>
 
-            <Row>
-              <Col sm={12} className="text-center">
-                <Link href="Signin">Sign out</Link>
+            <Row className="mb-3">
+              <Col sm={12}>
+                <Link href="/Dashboard" passHref legacyBehavior>
+                  <Button
+                    id="wd-signout-btn"
+                    variant="danger"
+                    className="w-100"
+                  >
+                    Sign out
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </Form>
