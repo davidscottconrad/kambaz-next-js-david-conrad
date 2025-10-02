@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Form, FormGroup, FormLabel, FormControl, FormSelect, Row, Col, Card, Button, InputGroup, Badge, } from 'react-bootstrap';
 import { BsCalendarEvent } from 'react-icons/bs';
+import styles from "./MyForm.module.css";
 
 export default function EditAssignment() {
 
@@ -22,13 +23,13 @@ export default function EditAssignment() {
                         defaultValue={
                             `The assignment is available online.
 
-                            Submit a link to the landing page of your Web application.
+Submit a link to the landing page of your Web application.
 
-                            The landing page should include:
-                            • Your full name and section
-                            • Links to each lab assignment
-                            • Link to the Kanbas application
-                            • Links to source code repositories`
+The landing page should include:
+• Your full name and section
+• Links to each lab assignment
+• Link to the Kanbas application
+• Links to source code repositories`
                         }
                     />
                 </FormGroup>
@@ -37,16 +38,16 @@ export default function EditAssignment() {
 
 
                 <FormGroup as={Row} className="mb-3" controlId="points">
-                    <FormLabel column className="fw-semibold">Points</FormLabel>
-                    <Col md={4}>
+                    <FormLabel column className="fw-semibold text-md-end">Points</FormLabel>
+                    <Col md={6}>
                         <FormControl type="number" defaultValue={100} />
                     </Col>
                 </FormGroup>
 
 
                 <Form.Group as={Row} className="mb-3 " controlId="group">
-                    <Form.Label column className="fw-semibold ">Assignment Group</Form.Label>
-                    <Col md={4}>
+                    <Form.Label column className="fw-semibold text-md-end">Assignment Group</Form.Label>
+                    <Col md={6}>
                         <Form.Select defaultValue="ASSIGNMENTS">
                             <option>ASSIGNMENTS</option>
                             <option>QUIZZES</option>
@@ -58,9 +59,8 @@ export default function EditAssignment() {
 
 
                 <FormGroup as={Row} className="mb-3" controlId="displayGradeAs">
-
-                    <FormLabel column className="fw-semibold">Display Grade as</FormLabel>
-                    <Col md={4}>
+                    <FormLabel column className="fw-semibold text-md-end">Display Grade as</FormLabel>
+                    <Col md={6}>
                         <FormSelect defaultValue="Percentage">
                             <option>Percentage</option>
                             <option>Points</option>
@@ -72,95 +72,56 @@ export default function EditAssignment() {
 
 
                 {/* Submission Type */}
-
-
-
-                <Form.Group as={Row} className="mb-3">
-                    <Col xs="auto" className="ms-auto">
-                        <div className="d-flex align-items-center flex-nowrap">
-                            <Form.Label htmlFor="submissionType" className="fw-semibold  mb-0  me-3">
-                                Submission Type
-                            </Form.Label>
-                            <Form.Select id="submissionType" defaultValue="Online" style={{ minWidth: 220 }}>
-                                <option>Online</option>
-                                <option>On Paper</option>
-                                <option>No Submission</option>
-                            </Form.Select>
-                        </div>
-
+                <FormGroup as={Row} className="mb-3" controlId="submissionType">
+                    <FormLabel column className="fw-semibold text-md-end">Submission Type</FormLabel>
+                    <Col md={6}>
+                        <Card className="h-100">
+                            <Card.Body>
+                                <Form.Select id="submissionType" defaultValue="Online" style={{ minWidth: 220 }}>
+                                    <option>Online</option>
+                                    <option>On Paper</option>
+                                    <option>No Submission</option>
+                                </Form.Select>
+                                <div className="fw-semibold mb-3 mt-3">Online Entry Options</div>
+                                <Form.Check className="mb-2" type="checkbox" label="Text Entry" />
+                                <Form.Check className="mb-2" type="checkbox" label="Website URL" defaultChecked />
+                                <Form.Check className="mb-2" type="checkbox" label="Media Recordings" />
+                                <Form.Check className="mb-2" type="checkbox" label="Student Annotation" />
+                                <Form.Check className="mb-0" type="checkbox" label="File Uploads" />
+                            </Card.Body>
+                        </Card>
                     </Col>
-                </Form.Group>
+                </FormGroup>
 
 
-                <Col md={6} lg={7} className="mt-3 mt-md-0">
-                    <Card className="h-100">
-                        <Card.Body>
-                            <div className="fw-semibold mb-2">Online Entry Options</div>
-                            <Form.Check className="mb-2" type="checkbox" label="Text Entry" />
-                            <Form.Check className="mb-2" type="checkbox" label="Website URL" defaultChecked />
-                            <Form.Check className="mb-2" type="checkbox" label="Media Recordings" />
-                            <Form.Check className="mb-2" type="checkbox" label="Student Annotation" />
-                            <Form.Check className="mb-0" type="checkbox" label="File Uploads" />
-                        </Card.Body>
-                    </Card>
-                </Col>
 
 
                 {/* Assign section */}
-                <Card className="mb-4">
-                    <Card.Body>
-                        <div className="fw-semibold mb-3">Assign</div>
-
-                        <Form.Group className="mb-3" controlId="assignTo">
-                            <Form.Label className="fw-semibold">Assign to</Form.Label>
-                            <div className="form-control d-flex align-items-center gap-2">
-                                <Badge bg="light" text="dark" className="px-2 py-1">Everyone</Badge>
-                            </div>
-                        </Form.Group>
-
-                        <Row className="g-3">
-                            <Col md={6}>
-                                <Form.Group controlId="dueDate">
+                <FormGroup as={Row} className="mb-3" controlId="assign">
+                    <FormLabel column className="fw-semibold text-md-end">Assign</FormLabel>
+                    <Col md={6}>
+                        <Card className="h-100">
+                            <Card.Body>
+                                <Form.Group className="mb-3" controlId="assignTo">
+                                    <Form.Label className="fw-semibold">Assign to</Form.Label>
+                                    <FormControl placeholder='Everyone' />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="due">
                                     <Form.Label className="fw-semibold">Due</Form.Label>
-                                    <InputGroup>
-                                        <Form.Control
-                                            type="datetime-local"
-                                            value="May 13, 2024, 11:59 PM"
-
-                                        />
-                                        <InputGroup.Text><BsCalendarEvent /></InputGroup.Text>
-                                    </InputGroup>
+                                    <div id="wd-css-styling-due-date">
+                                        <InputGroup className="mb-3">
+                                            <FormControl className={styles.noNativeIcon} type="date"
+                                                value="2024-05-13" />
+                                            <InputGroup.Text><BsCalendarEvent /></InputGroup.Text>
+                                        </InputGroup>
+                                    </div>
                                 </Form.Group>
-                            </Col>
-                            <Col md={3}>
-                                <Form.Group controlId="availableFrom">
-                                    <Form.Label className="fw-semibold">Available from</Form.Label>
-                                    <InputGroup>
-                                        <Form.Control
-                                            type="datetime-local"
-                                            value="May 6, 2024, 11:59 PM"
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </FormGroup>
 
-                                        />
-                                        <InputGroup.Text><BsCalendarEvent /></InputGroup.Text>
-                                    </InputGroup>
-                                </Form.Group>
-                            </Col>
-                            <Col md={3}>
-                                <Form.Group controlId="until">
-                                    <Form.Label className="fw-semibold">Until</Form.Label>
-                                    <InputGroup>
-                                        <Form.Control
-                                            type="datetime-local"
-                                            value="May 13, 2024, 11:59 PM"
 
-                                        />
-                                        <InputGroup.Text><BsCalendarEvent /></InputGroup.Text>
-                                    </InputGroup>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                    </Card.Body>
-                </Card>
 
                 {/* Actions */}
                 <div className="d-flex justify-content-end gap-2">
