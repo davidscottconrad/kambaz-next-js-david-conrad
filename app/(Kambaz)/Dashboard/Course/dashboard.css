@@ -14,3 +14,8 @@
     text-decoration: none;
     font-weight: bold;
 }
+
+.card-text-dash {
+    font-size: 0.8rem;
+    text-decoration: none !important;
+}

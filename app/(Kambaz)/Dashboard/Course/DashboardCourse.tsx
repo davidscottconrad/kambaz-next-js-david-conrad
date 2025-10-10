@@ -4,14 +4,12 @@ import { Card, CardBody, CardText, CardTitle } from "react-bootstrap";
 
 type DashboardCourseProps = {
     id: string;
-    imageSrc: string;
     title: string;
     description: string;
 };
 
 export default function DashboardCourse({
     id,
-    imageSrc,
     title,
     description,
 }: DashboardCourseProps) {
@@ -19,17 +17,20 @@ export default function DashboardCourse({
                           ${Math.floor(Math.random() * 256)}, 
                           ${Math.floor(Math.random() * 256)})`;
 
+
     return (
         <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center mb-4">
-            <Link href={`/Courses/${id}`} className="wd-dashboard-course-link">
+            <Link href={`/Courses/${id}`} style={{ textDecoration: "none" }} className="wd-dashboard-course-link">
                 <Card id="card-wrapper">
                     <div
                         className="color-div"
                         style={{ backgroundColor: randomColor }}
                     ></div>
                     <CardBody>
-                        <CardTitle className="card-title-dash">{title}</CardTitle>
-                        <CardText>{description}</CardText>
+                        <CardTitle className="card-title-dash text-nowrap overflow-hidden">{title}</CardTitle>
+                        <CardText
+                            className="card-text-dash overflow-hidden"
+                            style={{ maxHeight: "40px", overflow: "auto", textDecoration: "none" }}>{description}</CardText>
                     </CardBody>
                 </Card>
             </Link>
