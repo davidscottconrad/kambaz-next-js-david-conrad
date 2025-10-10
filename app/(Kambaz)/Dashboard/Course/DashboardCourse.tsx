@@ -20,7 +20,7 @@ export default function DashboardCourse({
 
     return (
         <div className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center mb-4">
-            <Link href={`/Courses/${id}`} style={{ textDecoration: "none" }} className="wd-dashboard-course-link">
+            <Link href={`/Courses/${id}/Home`} style={{ textDecoration: "none" }} className="wd-dashboard-course-link">
                 <Card id="card-wrapper">
                     <div
                         className="color-div"

@@ -14,7 +14,7 @@ export default function KambazNavigation() {
   const pathname = usePathname();
   const links = [
     { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
-    { label: "Courses", path: "/Courses/1234/Home", icon: LiaBookSolid },
+    { label: "Courses", path: "/Courses/RS102/Home", icon: LiaBookSolid },
     { label: "Calendar", path: "/Calendar", icon: IoCalendarOutline },
     { label: "Inbox", path: "/Inbox", icon: FaInbox },
     { label: "Labs", path: "/Labs", icon: LiaCogSolid },
@@ -63,7 +63,12 @@ export default function KambazNavigation() {
       </ListGroupItem>
 
       {links.map(({ label, path, icon: Icon }) => {
-        const isActive = pathname === path;
+
+        const isCourses = path.startsWith("/Courses");
+        const isActive = isCourses
+          ? pathname.startsWith("/Courses/")
+          : pathname === path || pathname.startsWith(`${path}/`);
+
         return (
           <ListGroupItem
             key={path}
@@ -82,6 +87,7 @@ export default function KambazNavigation() {
           </ListGroupItem>
         );
       })}
+
     </ListGroup>
   );
 }
