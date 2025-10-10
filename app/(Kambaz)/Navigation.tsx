@@ -9,8 +9,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+
 export default function KambazNavigation() {
   const pathname = usePathname();
+  const links = [
+    { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
+    { label: "Courses", path: "/Courses/1234/Home", icon: LiaBookSolid },
+    { label: "Calendar", path: "/Calendar", icon: IoCalendarOutline },
+    { label: "Inbox", path: "/Inbox", icon: FaInbox },
+    { label: "Labs", path: "/Labs", icon: LiaCogSolid },
+  ];
 
   return (
     <ListGroup
@@ -54,107 +62,26 @@ export default function KambazNavigation() {
         </Link>
       </ListGroupItem>
 
-
-      <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") ? "bg-white" : "bg-black"
-          }`}
-        active={pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") || pathname.startsWith("/Courses")}
-      >
-        <Link
-          href="/Dashboard"
-          id="wd-dashboard-link"
-          className={`d-block text-decoration-none ${pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") ? "text-danger" : "text-white"
-            }`}
-        >
-          <AiOutlineDashboard
-            className={`fs-1 ${pathname.startsWith("/Dashboard") || pathname.startsWith("/Courses") ? "text-danger" : "text-white"
+      {links.map(({ label, path, icon: Icon }) => {
+        const isActive = pathname === path;
+        return (
+          <ListGroupItem
+            key={path}
+            className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${isActive ? "bg-white" : "bg-black"
               }`}
-          />
-
-          <div>Dashboard</div>
-        </Link>
-      </ListGroupItem>
-
-
-      <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Calendar" ? "bg-white" : "bg-black"
-          }`}
-        active={pathname === "/Calendar"}
-      >
-        <Link
-          href="/Calendar"
-          id="wd-calendar-link"
-          className={`d-block text-decoration-none ${pathname === "/Calendar" ? "text-danger" : "text-white"
-            }`}
-        >
-          <IoCalendarOutline
-            className={`fs-1 ${pathname === "/Calendar" ? "text-danger" : "text-white"
-              }`}
-          />
-
-          <div>Calendar</div>
-        </Link>
-      </ListGroupItem>
-
-      <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Inbox" ? "bg-white" : "bg-black"
-          }`}
-        active={pathname === "/Inbox"}
-      >
-        <Link
-          href="/Inbox"
-          id="wd-inbox-link"
-          className={`d-block text-decoration-none ${pathname === "/Inbox" ? "text-danger" : "text-white"
-            }`}
-        >
-          <FaInbox
-            className={`fs-1 ${pathname === "/Inbox" ? "text-danger" : "text-white"
-              }`}
-          />
-
-          <div>Inbox</div>
-        </Link>
-      </ListGroupItem>
-      <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center  ${pathname === "/Settings" ? "bg-white" : "bg-black"
-          }`}
-        active={pathname === "/Settings"}
-      >
-        <Link
-          href="/Settings"
-          id="wd-settings-link"
-          className={`d-block text-decoration-none ${pathname === "/Settings" ? "text-danger" : "text-white"
-            }`}
-        >
-          <LiaCogSolid
-            className={`fs-1 ${pathname === "/Settings" ? "text-danger" : "text-white"
-              }`}
-          />
-
-          <div>Settings</div>
-        </Link>
-      </ListGroupItem>
-      <ListGroupItem
-        className={`border-0 d-flex flex-col justify-content-center mt-2 mb-2 text-center ${pathname.startsWith("/Labs") ? "bg-white" : "bg-black"
-          }`}
-        active={pathname.startsWith("/Labs")}
-      >
-        <Link
-          href="/Labs"
-          id="wd-labs-link"
-          className={`d-block text-decoration-none ${pathname.startsWith("/Labs") ? "text-danger" : "text-white"
-            }`}
-        >
-          <LiaBookSolid
-            className={`fs-1 ${pathname.startsWith("/Labs") ? "text-danger" : "text-white"
-              }`}
-          />
-          <div>
-
-            Labs
-          </div>
-        </Link>
-      </ListGroupItem>
+            active={isActive}
+          >
+            <Link
+              href={path}
+              className={`d-block text-decoration-none ${isActive ? "text-danger" : "text-white"
+                }`}
+            >
+              <Icon className={`fs-1 ${isActive ? "text-danger" : "text-white"}`} />
+              <div>{label}</div>
+            </Link>
+          </ListGroupItem>
+        );
+      })}
     </ListGroup>
   );
 }
