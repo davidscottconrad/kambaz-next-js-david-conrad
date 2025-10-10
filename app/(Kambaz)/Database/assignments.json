@@ -1,0 +1,182 @@
+[
+    {
+        "_id": "A101",
+        "name": "A1 - Rocket Propulsion Basics",
+        "course": "RS101",
+        "available": "May 6 at 12:00am",
+        "due": "May 13 at 11:59pm",
+        "points": 100,
+        "module": "M101"
+    },
+    {
+        "_id": "A102",
+        "name": "A2 - Fuel Efficiency Calculations",
+        "course": "RS101",
+        "available": "May 7 at 12:00am",
+        "due": "May 16 at 11:59pm",
+        "points": 100,
+        "module": "M102"
+    },
+    {
+        "_id": "A103",
+        "name": "A3 - Nozzle Optimization Report",
+        "course": "RS101",
+        "available": "May 8 at 12:00am",
+        "due": "May 18 at 11:59pm",
+        "points": 100,
+        "module": "M103"
+    },
+    {
+        "_id": "A104",
+        "name": "A4 - Propellant Chemistry Lab",
+        "course": "RS101",
+        "available": "May 10 at 12:00am",
+        "due": "May 20 at 11:59pm",
+        "points": 100,
+        "module": "M104"
+    },
+    {
+        "_id": "A201",
+        "name": "A1 - Aerodynamic Flow Analysis",
+        "course": "RS102",
+        "available": "May 6 at 12:00am",
+        "due": "May 13 at 11:59pm",
+        "points": 100,
+        "module": "M201"
+    },
+    {
+        "_id": "A202",
+        "name": "A2 - Shock Wave Report",
+        "course": "RS102",
+        "available": "May 9 at 12:00am",
+        "due": "May 17 at 11:59pm",
+        "points": 100,
+        "module": "M202"
+    },
+    {
+        "_id": "A203",
+        "name": "A3 - Airfoil Design Project",
+        "course": "RS102",
+        "available": "May 11 at 12:00am",
+        "due": "May 19 at 11:59pm",
+        "points": 100,
+        "module": "M203"
+    },
+    {
+        "_id": "A301",
+        "name": "A1 - Spacecraft Structure Analysis",
+        "course": "RS103",
+        "available": "May 6 at 12:00am",
+        "due": "May 13 at 11:59pm",
+        "points": 100,
+        "module": "M301"
+    },
+    {
+        "_id": "A302",
+        "name": "A2 - Thermal Control Design",
+        "course": "RS103",
+        "available": "May 9 at 12:00am",
+        "due": "May 17 at 11:59pm",
+        "points": 100,
+        "module": "M302"
+    },
+    {
+        "_id": "A303",
+        "name": "A3 - Payload Integration Plan",
+        "course": "RS103",
+        "available": "May 12 at 12:00am",
+        "due": "May 20 at 11:59pm",
+        "points": 100,
+        "module": "M303"
+    },
+    {
+        "_id": "A401",
+        "name": "A1 - Hydrocarbon Identification",
+        "course": "RS104",
+        "available": "May 6 at 12:00am",
+        "due": "May 13 at 11:59pm",
+        "points": 100,
+        "module": "M401"
+    },
+    {
+        "_id": "A402",
+        "name": "A2 - Organic Synthesis Lab",
+        "course": "RS104",
+        "available": "May 10 at 12:00am",
+        "due": "May 18 at 11:59pm",
+        "points": 100,
+        "module": "M402"
+    },
+    {
+        "_id": "A501",
+        "name": "A1 - Coordination Chemistry Worksheet",
+        "course": "RS105",
+        "available": "May 7 at 12:00am",
+        "due": "May 14 at 11:59pm",
+        "points": 100,
+        "module": "M501"
+    },
+    {
+        "_id": "A502",
+        "name": "A2 - Metal Complex Synthesis",
+        "course": "RS105",
+        "available": "May 11 at 12:00am",
+        "due": "May 19 at 11:59pm",
+        "points": 100,
+        "module": "M502"
+    },
+    {
+        "_id": "A601",
+        "name": "A1 - Thermodynamics Problem Set",
+        "course": "RS106",
+        "available": "May 8 at 12:00am",
+        "due": "May 15 at 11:59pm",
+        "points": 100,
+        "module": "M601"
+    },
+    {
+        "_id": "A602",
+        "name": "A2 - Quantum Mechanics Quiz",
+        "course": "RS106",
+        "available": "May 12 at 12:00am",
+        "due": "May 20 at 11:59pm",
+        "points": 100,
+        "module": "M602"
+    },
+    {
+        "_id": "A701",
+        "name": "A1 - Elvish Translation Exercise",
+        "course": "RS107",
+        "available": "May 6 at 12:00am",
+        "due": "May 13 at 11:59pm",
+        "points": 100,
+        "module": "M701"
+    },
+    {
+        "_id": "A702",
+        "name": "A2 - Dwarvish Script Analysis",
+        "course": "RS107",
+        "available": "May 10 at 12:00am",
+        "due": "May 18 at 11:59pm",
+        "points": 100,
+        "module": "M702"
+    },
+    {
+        "_id": "A801",
+        "name": "A1 - Council of Elrond Case Study",
+        "course": "RS108",
+        "available": "May 7 at 12:00am",
+        "due": "May 14 at 11:59pm",
+        "points": 100,
+        "module": "M801"
+    },
+    {
+        "_id": "A802",
+        "name": "A2 - Multi-species Diplomacy Simulation",
+        "course": "RS108",
+        "available": "May 11 at 12:00am",
+        "due": "May 19 at 11:59pm",
+        "points": 100,
+        "module": "M802"
+    }
+]

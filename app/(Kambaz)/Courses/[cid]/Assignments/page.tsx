@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+
+
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import ModuleControlButtons from "../Modules/ModuleControlButtons";
@@ -10,8 +14,23 @@ import AssignmentControls from "./AssignmentControls";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import InputGroupText from "react-bootstrap/InputGroupText";
-
+import { useParams } from "next/navigation";
+import * as db from "../../../Database";
 export default function Modules() {
+
+    const { cid } = useParams();
+    interface Assignments {
+        _id: string;
+        name: string;
+        course: string;
+        points?: number;
+        due?: string;
+        available?: string;
+        module?: string[];
+    }
+
+    const assignments: Assignments[] = db.assignments as unknown as Assignments[];
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center">
@@ -37,7 +56,7 @@ export default function Modules() {
                 </div>
             </div>
             <br /><br /><br /><br />
-            <ListGroup className="rounded-0" id="wd-modules">
+            <ListGroup className="rounded-0 m-3" id="wd-modules">
                 <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
                     <div className="wd-title p-3 ps-2 bg-secondary d-flex justify-content-between flex-row">
                         <div>
@@ -46,37 +65,29 @@ export default function Modules() {
                         <div className="d-flex flex-row "><div className="mx-2 border rounded px-2 border-dark">40% of Total</div>
                             <ModuleControlButtons /></div>
                     </div>
+
                     <ListGroup className="wd-lessons rounded-0 d-flex" style={{ minHeight: "80px", borderLeft: "6px solid green" }}>
-                        <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
-                            <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
-                            <div className="p-2">
-                                <div><Link href="/Courses/1234/Assignments/125/Editor" className="text-decoration-none text-black">A1</Link></div>
-                                <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 6 at 12:00am | Due May 13 at 11:59pm | 100pts</div>
-                            </div>
+                        {assignments
+                            .filter((assignment) => assignment.course === cid)
+                            .map((assignment, idx) => {
+                                return (
 
-                            <AssignmentControls />
+                                    <ListGroupItem key={idx} className="wd-lesson p-2 d-flex align-items-center">
+                                        <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
+                                        <div className="p-2">
+                                            <div><Link href="/Courses/1234/Assignments/125/Editor" className="text-decoration-none text-black fs-4">{assignment.name}</Link></div>
+                                            <div className="fs-6">
+                                                <span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> {assignment.available} | Due {assignment.due} | {assignment.points}pts
+                                            </div>
+                                        </div>
 
-                        </ListGroupItem>
-                        <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
-                            <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
-                            <div className="p-2">
-                                <div><Link href="/Courses/1234/Assignments/15/Editor" className="text-decoration-none text-black">A2</Link></div>
-                                <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 7 at 12:00am | Due May 16 at 11:59pm | 100pts</div>
-                            </div>
+                                        <AssignmentControls />
 
-                            <AssignmentControls />
+                                    </ListGroupItem>
 
-                        </ListGroupItem>
-                        <ListGroupItem className="wd-lesson p-2 d-flex align-items-center">
-                            <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
-                            <div className="p-2">
-                                <div><Link href="/Courses/1234/Assignments/1235/Editor" className="text-decoration-none text-black">A3</Link></div>
-                                <div className="fs-6"><span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> May 8 at 12:00am | Due May 18 at 11:59pm | 100pts</div>
-                            </div>
-
-                            <AssignmentControls />
-
-                        </ListGroupItem>
+                                )
+                            })
+                        }
                     </ListGroup>
                 </ListGroupItem>
             </ListGroup>
