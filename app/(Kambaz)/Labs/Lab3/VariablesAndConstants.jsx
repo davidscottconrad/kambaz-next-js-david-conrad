@@ -8,6 +8,12 @@ export default function VariableTypes() {
     let isBoolean = typeof booleanVariable;
     return (
         <div id="wd-variable-types">
+            <div id="wd-variables-and-constants">
+                <h4>Variables and Constants</h4>
+                functionScoped = {functionScoped}<br />
+                blockScoped = {blockScoped}<br />
+                constant1 = {constant1}<hr />
+            </div>
             <h4>Variables Types</h4>
             numberVariable = {numberVariable}<br />
             floatingPointNumber = {floatingPointNumber}<br />
