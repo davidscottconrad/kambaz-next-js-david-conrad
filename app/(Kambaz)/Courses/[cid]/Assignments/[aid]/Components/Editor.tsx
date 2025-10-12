@@ -3,10 +3,10 @@
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import * as db from "../../../../../Database";
+import { useState } from "react";
 
 export default function Editor() {
     const { cid, aid } = useParams();
-    console.log('cid, aid', cid, aid);
     interface Assignments {
         _id: string;
         name: string;
@@ -25,7 +25,8 @@ export default function Editor() {
 
     const assignments: Assignments[] = db.assignments as unknown as Assignments[];
     const assignment = assignments.find(a => a._id === aid);
-    console.log('assignment', assignment);
+
+    const [assignmentState, setAssignmentState] = useState<Assignments | undefined>(assignment);
 
     return (
         <div id="wd-assignments-editor">
@@ -34,10 +35,13 @@ export default function Editor() {
             <Form>
                 <Row className="mb-3">
                     <Col sm={12}>
-                        <Form.Label htmlFor="wd-name">
-                            Name
-                        </Form.Label>
-                        <Form.Control id="wd-name" type="text" value={assignment ? assignment.name : ''} />
+                        <Form.Label htmlFor="wd-name">Name</Form.Label>
+                        <Form.Control
+                            id="wd-name"
+                            type="text"
+                            value={assignmentState?.name || ''}
+                            onChange={e => setAssignmentState({ ...assignmentState!, name: e.target.value })}
+                        />
                     </Col>
                 </Row>
 
@@ -48,7 +52,8 @@ export default function Editor() {
                             as="textarea"
                             id="wd-description"
                             rows={4}
-                            value={assignment ? assignment.description : ''}
+                            value={assignmentState?.description || ''}
+                            onChange={e => setAssignmentState({ ...assignmentState!, description: e.target.value })}
                         />
                     </Col>
                 </Row>
@@ -56,14 +61,23 @@ export default function Editor() {
                 <Row className="mb-3">
                     <Form.Label column sm={2}>Points</Form.Label>
                     <Col sm={10}>
-                        <Form.Control id="wd-points" type="number" value={assignment ? assignment.points : 100} />
+                        <Form.Control
+                            id="wd-points"
+                            type="number"
+                            value={assignmentState?.points ?? 100}
+                            onChange={e => setAssignmentState({ ...assignmentState!, points: Number(e.target.value) })}
+                        />
                     </Col>
                 </Row>
 
                 <Row className="mb-3">
                     <Form.Label column sm={2}>Assignment Group</Form.Label>
                     <Col sm={10}>
-                        <Form.Select id="wd-group-name">
+                        <Form.Select
+                            id="wd-group-name"
+                            value={assignmentState?.module?.[0] || "Assignments"}
+                            onChange={e => setAssignmentState({ ...assignmentState!, module: [e.target.value] })}
+                        >
                             <option value="Assignments">Assignments</option>
                             <option value="quizzes">Quizzes</option>
                             <option value="Exams">Exams</option>
@@ -77,7 +91,8 @@ export default function Editor() {
                     <Col sm={10}>
                         <Form.Select
                             id="wd-display-grade-as"
-                            value={assignment?.displayGradeAs || "percentage"}
+                            value={assignmentState?.displayGradeAs || "percentage"}
+                            onChange={e => setAssignmentState({ ...assignmentState!, displayGradeAs: e.target.value })}
                         >
                             <option value="percentage">Percentage</option>
                             <option value="points">Points</option>
@@ -91,48 +106,32 @@ export default function Editor() {
                         <Form.Select
                             id="wd-submission-type"
                             className="mb-3"
-                            value={assignment?.submissionType || "online"}
+                            value={assignmentState?.submissionType || "online"}
+                            onChange={e => setAssignmentState({ ...assignmentState!, submissionType: e.target.value })}
                         >
                             <option value="online">Online</option>
                             <option value="in-person">In Person</option>
                         </Form.Select>
 
                         <Form.Label className="fw-bold mb-2">Online Entry Options</Form.Label>
-                        <Form.Check
-                            type="checkbox"
-                            id="wd-text-entry"
-                            label="Text Entry"
-                            checked={assignment?.onlineEntryOptions?.includes("Text Entry") || false}
-                            readOnly
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="wd-website-url"
-                            label="Website URL"
-                            checked={assignment?.onlineEntryOptions?.includes("Website URL") || false}
-                            readOnly
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="wd-media-recordings"
-                            label="Media Recordings"
-                            checked={assignment?.onlineEntryOptions?.includes("Media Recordings") || false}
-                            readOnly
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="wd-student-annotation"
-                            label="Student Annotation"
-                            checked={assignment?.onlineEntryOptions?.includes("Student Annotation") || false}
-                            readOnly
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="wd-file-upload"
-                            label="File Upload"
-                            checked={assignment?.onlineEntryOptions?.includes("File Upload") || false}
-                            readOnly
-                        />
+                        {["Text Entry", "Website URL", "Media Recordings", "Student Annotation", "File Upload"].map(option => (
+                            <Form.Check
+                                key={option}
+                                type="checkbox"
+                                id={`wd-${option.toLowerCase().replace(/ /g, "-")}`}
+                                label={option}
+                                checked={assignmentState?.onlineEntryOptions?.includes(option) || false}
+                                onChange={e => {
+                                    const options = assignmentState?.onlineEntryOptions || [];
+                                    setAssignmentState({
+                                        ...assignmentState!,
+                                        onlineEntryOptions: e.target.checked
+                                            ? [...options, option]
+                                            : options.filter(o => o !== option)
+                                    });
+                                }}
+                            />
+                        ))}
                     </Col>
                 </Row>
 
@@ -143,8 +142,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-assign-to"
                             type="text"
-                            value={assignment?.assignTo || "Everyone"}
-                            readOnly
+                            value={assignmentState?.assignTo || "Everyone"}
+                            onChange={e => setAssignmentState({ ...assignmentState!, assignTo: e.target.value })}
                         />
                     </Col>
                 </Row>
@@ -155,8 +154,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-due-date"
                             type="date"
-                            value={assignment?.due || ""}
-                            readOnly
+                            value={assignmentState?.due || ""}
+                            onChange={e => setAssignmentState({ ...assignmentState!, due: e.target.value })}
                         />
                     </Col>
                 </Row>
@@ -167,8 +166,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-available-from"
                             type="date"
-                            value={assignment?.available || ""}
-                            readOnly
+                            value={assignmentState?.available || ""}
+                            onChange={e => setAssignmentState({ ...assignmentState!, available: e.target.value })}
                         />
                     </Col>
                     <Form.Label column sm={1}>Until</Form.Label>
@@ -176,8 +175,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-available-until"
                             type="date"
-                            value={assignment?.availableUntil || ""}
-                            readOnly
+                            value={assignmentState?.availableUntil || ""}
+                            onChange={e => setAssignmentState({ ...assignmentState!, availableUntil: e.target.value })}
                         />
                     </Col>
                 </Row>
