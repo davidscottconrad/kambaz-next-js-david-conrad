@@ -1,4 +1,7 @@
 export default function VariableTypes() {
+    var functionScoped = 2;
+    let blockScoped = 5;
+    const constant1 = functionScoped - blockScoped
     let numberVariable = 123;
     let floatingPointNumber = 234.345;
     let stringVariable = 'Hello World!';
