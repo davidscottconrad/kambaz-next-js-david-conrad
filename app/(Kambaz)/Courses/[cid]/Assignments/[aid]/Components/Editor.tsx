@@ -1,6 +1,32 @@
+'use client';
+
 import { Form, Row, Col, Button } from "react-bootstrap";
+import { useParams } from "next/navigation";
+import * as db from "../../../../../Database";
 
 export default function Editor() {
+    const { cid, aid } = useParams();
+    console.log('cid, aid', cid, aid);
+    interface Assignments {
+        _id: string;
+        name: string;
+        course: string;
+        points?: number;
+        due?: string;
+        available?: string;
+        availableUntil?: string;
+        module?: string[];
+        description?: string;
+        displayGradeAs?: string;
+        submissionType?: string;
+        onlineEntryOptions?: string[];
+        assignTo?: string;
+    }
+
+    const assignments: Assignments[] = db.assignments as unknown as Assignments[];
+    const assignment = assignments.find(a => a._id === aid);
+    console.log('assignment', assignment);
+
     return (
         <div id="wd-assignments-editor">
             <h2>Assignment Editor</h2>
@@ -8,8 +34,10 @@ export default function Editor() {
             <Form>
                 <Row className="mb-3">
                     <Col sm={12}>
-                        <Form.Label htmlFor="wd-name">Assignment Name</Form.Label>
-                        <Form.Control id="wd-name" type="text" />
+                        <Form.Label htmlFor="wd-name">
+                            Name
+                        </Form.Label>
+                        <Form.Control id="wd-name" type="text" value={assignment ? assignment.name : ''} />
                     </Col>
                 </Row>
 
@@ -20,7 +48,7 @@ export default function Editor() {
                             as="textarea"
                             id="wd-description"
                             rows={4}
-                            defaultValue="The assignment is available online. Submit a link to the landing page of"
+                            value={assignment ? assignment.description : ''}
                         />
                     </Col>
                 </Row>
@@ -28,7 +56,7 @@ export default function Editor() {
                 <Row className="mb-3">
                     <Form.Label column sm={2}>Points</Form.Label>
                     <Col sm={10}>
-                        <Form.Control id="wd-points" type="number" defaultValue="100" />
+                        <Form.Control id="wd-points" type="number" value={assignment ? assignment.points : 100} />
                     </Col>
                 </Row>
 
@@ -47,7 +75,10 @@ export default function Editor() {
                 <Row className="mb-3">
                     <Form.Label column sm={2}>Display Grade as</Form.Label>
                     <Col sm={10}>
-                        <Form.Select id="wd-display-grade-as">
+                        <Form.Select
+                            id="wd-display-grade-as"
+                            value={assignment?.displayGradeAs || "percentage"}
+                        >
                             <option value="percentage">Percentage</option>
                             <option value="points">Points</option>
                         </Form.Select>
@@ -57,7 +88,11 @@ export default function Editor() {
                 <Row className="mb-3">
                     <Form.Label column sm={2}>Submission Type</Form.Label>
                     <Col sm={10}>
-                        <Form.Select id="wd-submission-type" className="mb-3">
+                        <Form.Select
+                            id="wd-submission-type"
+                            className="mb-3"
+                            value={assignment?.submissionType || "online"}
+                        >
                             <option value="online">Online</option>
                             <option value="in-person">In Person</option>
                         </Form.Select>
@@ -67,26 +102,36 @@ export default function Editor() {
                             type="checkbox"
                             id="wd-text-entry"
                             label="Text Entry"
+                            checked={assignment?.onlineEntryOptions?.includes("Text Entry") || false}
+                            readOnly
                         />
                         <Form.Check
                             type="checkbox"
                             id="wd-website-url"
                             label="Website URL"
+                            checked={assignment?.onlineEntryOptions?.includes("Website URL") || false}
+                            readOnly
                         />
                         <Form.Check
                             type="checkbox"
                             id="wd-media-recordings"
                             label="Media Recordings"
+                            checked={assignment?.onlineEntryOptions?.includes("Media Recordings") || false}
+                            readOnly
                         />
                         <Form.Check
                             type="checkbox"
                             id="wd-student-annotation"
                             label="Student Annotation"
+                            checked={assignment?.onlineEntryOptions?.includes("Student Annotation") || false}
+                            readOnly
                         />
                         <Form.Check
                             type="checkbox"
                             id="wd-file-upload"
                             label="File Upload"
+                            checked={assignment?.onlineEntryOptions?.includes("File Upload") || false}
+                            readOnly
                         />
                     </Col>
                 </Row>
@@ -95,7 +140,12 @@ export default function Editor() {
                     <Form.Label column sm={2}>Assign</Form.Label>
                     <Col sm={10}>
                         <Form.Label>Assign to</Form.Label>
-                        <Form.Control id="wd-assign-to" type="text" defaultValue="Everyone" />
+                        <Form.Control
+                            id="wd-assign-to"
+                            type="text"
+                            value={assignment?.assignTo || "Everyone"}
+                            readOnly
+                        />
                     </Col>
                 </Row>
 
@@ -105,7 +155,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-due-date"
                             type="date"
-                            defaultValue="2000-01-01"
+                            value={assignment?.due || ""}
+                            readOnly
                         />
                     </Col>
                 </Row>
@@ -116,7 +167,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-available-from"
                             type="date"
-                            defaultValue="2000-01-01"
+                            value={assignment?.available || ""}
+                            readOnly
                         />
                     </Col>
                     <Form.Label column sm={1}>Until</Form.Label>
@@ -124,7 +176,8 @@ export default function Editor() {
                         <Form.Control
                             id="wd-available-until"
                             type="date"
-                            defaultValue="2000-01-01"
+                            value={assignment?.availableUntil || ""}
+                            readOnly
                         />
                     </Col>
                 </Row>

@@ -75,7 +75,7 @@ export default function Modules() {
                                     <ListGroupItem key={idx} className="wd-lesson p-2 d-flex align-items-center">
                                         <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
                                         <div className="p-2">
-                                            <div><Link href="/Courses/1234/Assignments/125/Editor" className="text-decoration-none text-black fs-4">{assignment.name}</Link></div>
+                                            <div><Link href={`/Courses/${cid}/Assignments/${assignment._id}/Editor`} className="text-decoration-none text-black fs-4">{assignment.name}</Link></div>
                                             <div className="fs-6">
                                                 <span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> {assignment.available} | Due {assignment.due} | {assignment.points}pts
                                             </div>
