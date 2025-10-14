@@ -7,6 +7,15 @@ import AssignmentSideBtn from "./AssignmentSideBtn";
 import { ListGroup, ListGroupItem } from "react-bootstrap"
 import { BsGripVertical, BsFileEarmarkText } from "react-icons/bs";
 import Link from "next/link";
+type Assignment = {
+  id: string;
+  course: string;
+  title: string;
+  dueDate: string;
+  points: number;
+  // add fields you actually render; unknown keeps lint happy for extras
+  [k: string]: unknown;
+};
 
 export default function Assignments() {
   const { cid } = useParams() as { cid: string };
@@ -25,8 +34,8 @@ export default function Assignments() {
 
 
         {/* Rows */}
-        {assignments.filter((assignment: any) => assignment.course === cid)
-          .map((assignment: any) => (
+        {assignments.filter((assignment) => assignment.course === cid)
+          .map((assignment) => (
             <Link
               key={assignment._id}                                // key on the wrapper is fine
               href={`/Courses/${cid}/Assignments/${assignment._id}`}

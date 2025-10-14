@@ -3,7 +3,7 @@ export default function IfElse() {
     // The ternary operators ? and : can be used to render one 
     // of two options based on the value of a boolean expression.
 
-    let true1 = true, false1 = false;
+    const true1 = true, false1 = false;
 
     return (
         <div id="wd-if-else">
