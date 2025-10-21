@@ -15,7 +15,7 @@ export default function CourseNavigation() {
           key={link}
           href={`/Courses/${cid}/${link}`}
           id={`wd-course-${link.toLowerCase()}-link`}
-          className={`list-group-item border-0 ${pathname.startsWith(`/Courses/${cid}/${link}`) ? "text-dark border-left-2" : "text-danger"
+          className={`list-group-item ${pathname.startsWith(`/Courses/${cid}/${link}`) ? "active" : "text-danger  border-0"
             }`}
         >
           {link}

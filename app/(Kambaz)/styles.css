@@ -1,0 +1,30 @@
+/* .list-group-item+.list-group-item.active {
+    border: none;
+    background-color: white;
+    border-left: 2px solid black;
+    color: black
+} */
+
+
+.list-group.wd>.list-group-item.active {
+    color: black;
+    background-color: white;
+    border: none;
+    border-left: 3px solid black !important;
+
+}
+
+.btn-secondary {
+    --bs-btn-color: #000 !important;
+    --bs-btn-bg: #c7cdd1 !important;
+    --bs-btn-border-color: #c7cdd1 !important;
+    --bs-btn-hover-color: #fff !important;
+}
+
+.bg-secondary {
+    --bs-secondary-rgb: 199, 205, 209;
+}
+
+.wd-lesson {
+    border-left: 3px solid green !important;
+}
