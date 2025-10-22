@@ -7,6 +7,15 @@ import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewCourse } from "../Courses/reducer";
 
+interface Course {
+    _id: string;
+    name: string;
+    number: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+}
+
 export default function Dashboard() {
     const { courses } = useSelector((state: any) => state.coursesReducer);
 
@@ -39,9 +48,8 @@ export default function Dashboard() {
             <hr />
             <h2 id="wd-dashboard-published">Published Courses (8)</h2>
             <hr />
-
             <div className="row">
-                {courses.map((course) => (
+                {courses.map((course: Course) => (
                     <DashboardCourse
                         key={course._id}
                         id={course._id}
@@ -50,6 +58,6 @@ export default function Dashboard() {
                     />
                 ))}
             </div>
-        </div>
+        </div >
     );
 }

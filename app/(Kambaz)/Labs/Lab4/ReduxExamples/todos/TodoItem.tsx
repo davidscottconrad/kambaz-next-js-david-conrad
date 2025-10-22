@@ -3,7 +3,7 @@ import "./styles.css";
 import { useDispatch } from "react-redux";
 import { deleteTodo, setTodo } from "./todosReducer";
 
-export default function TodoItem({ todo }: {
+export default function TodoItem({ todo = { id: "", title: "" } }: {
     todo: { id: string; title: string };
 }) {
     const dispatch = useDispatch();
