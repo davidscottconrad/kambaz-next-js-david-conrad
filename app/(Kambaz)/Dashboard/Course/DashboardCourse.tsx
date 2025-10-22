@@ -3,7 +3,7 @@
 import Link from "next/link";
 import "./dashboard.css";
 import { Card, CardBody, CardText, CardTitle } from "react-bootstrap";
-
+import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { deleteCourse, updateCourse } from "../../Courses/reducer";
 
@@ -19,9 +19,9 @@ export default function DashboardCourse({
     description,
 }: DashboardCourseProps) {
     const dispatch = useDispatch();
-    const randomColor = `rgb(${Math.floor(Math.random() * 256)}, 
-                          ${Math.floor(Math.random() * 256)}, 
-                          ${Math.floor(Math.random() * 256)})`;
+    const randomColor = useMemo(() => `rgb(${Math.floor(Math.random() * 256)},
+                          ${Math.floor(Math.random() * 256)},
+                          ${Math.floor(Math.random() * 256)})`, []);
 
     const handleDelete = (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent the Link navigation
