@@ -1,0 +1,52 @@
+#wd-add-todo-click {
+    background-color: green;
+    color: white;
+    border: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#wd-update-todo-click {
+    background-color: orange;
+    color: white;
+    border: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#wd-delete-todo-click {
+    background-color: red;
+    color: white;
+    border: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#wd-set-todo-click {
+    background-color: blue;
+    color: white;
+    border: 0;
+}
+
+.todo-list-group-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+}
+
+.todo-title {
+    flex: 1 1 auto;
+    text-align: left;
+}
+
+.todo-buttons-div {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.todo-title {
+    width: 60%;
+    margin-right: 10px;
+}
