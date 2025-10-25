@@ -1,13 +1,25 @@
+
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
+import ModuleEditor from "./ModuleEditor";
 import GreenCheckmark from "./GreenCheckmark";
-export default function ModulesControls() {
+import { useState } from "react";
+export default function ModulesControls(
+    { moduleName, setModuleName, addModule }:
+        { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
+    const [show, setShow] = useState(false);
+    console.log("ModulesControls render", show);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    console.log("ModulesControls moduleName:", moduleName);
     return (
         <div id="wd-modules-controls" className="text-nowrap">
-            <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn">
+            <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn" onClick={handleShow}>
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                 Module
             </Button>
+            <ModuleEditor show={show} handleClose={handleClose} dialogTitle="Add Module"
+                moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />
             <Dropdown className="float-end me-2">
                 <DropdownToggle variant="secondary" size="lg" id="wd-publish-all-btn">
                     <GreenCheckmark /> Publish All
@@ -37,6 +49,6 @@ export default function ModulesControls() {
             <Button variant="secondary" size="lg" className="float-end me-2" id="wd-collapse-all">
                 Collapse All
             </Button>
-        </div>
+        </div >
     );
 }
