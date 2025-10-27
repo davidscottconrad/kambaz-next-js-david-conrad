@@ -1,3 +1,4 @@
+"use client"
 import VariablesAndConstants from "./VariablesAndConstants";
 import VariableTypes from "./VariableTypes";
 import BooleanVariables from "./BooleanVariables"
@@ -32,13 +33,88 @@ import Square from "./Square"
 import Highlight from "./Highlight"
 import PathParameters from "./PathParameters"
 import AddPathParameters from "./AddPathParameters"
+import { Provider } from "react-redux";
+import store from "../store";
+import { useSelector } from "react-redux";
+import { ListGroup, ListGroupItem } from "react-bootstrap"
+
+// export default function Lab3() {
+
+//     const { todos } = useSelector((state: any) => state.todosReducer);
+//     //Provider grab the "store" and provides to the components
+//     return (
+//         <Provider store={store}>
+//             <div id="wd-lab3">
+//                 <h2>Lab 3</h2>
+//                 <ListGroup>
+//                     {todos.map((todo: any) => (
+//                         <ListGroupItem key={todo.id}>
+//                             {todo.title}
+//                         </ListGroupItem>
+//                     ))}
+//                 </ListGroup>
+//                 <hr />
+
+//                 <h3>Intro to TypeScript</h3>
+//                 <VariablesAndConstants />
+//                 <VariableTypes />
+//                 <BooleanVariables />
+//                 <IfElse />
+//                 <TernaryOperator /><br />
+//                 <ConditionalOutputIfElse /> <br />
+//                 <ConditionalOutputInline /><br />
+//                 <LegacyFunctions /><br />
+//                 <ArrowFunctions /><br />
+//                 <ImpliedReturn /><br />
+//                 <TemplateLiterals /><br />
+//                 <SimpleArrays />
+//                 <ArrayIndexAndLength />
+//                 <AddingAndRemovingToFromArrays />
+//                 <ForLoops />
+//                 <MapFunction />
+//                 <FindFunction />
+//                 <FindIndex />
+//                 <FilterFunction />
+//                 <JsonStringify />
+//                 <House />
+//                 <TodoItem />
+//                 <TodoList />
+//                 <Spreading />
+//                 <Destructing />
+//                 <FunctionDestructing />
+//                 <DestructingImports />
+//                 <Classes />
+//                 <Styles />
+//                 <Add a={3} b={4} /> {/*把HTML和JS融合一起，passing arguments */}
+//                 <h4>Square of 4</h4>
+//                 <Square>4</Square> {/*Passing param in Body (有close tag)*/}
+//                 <hr />
+//                 <Highlight>
+//                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
+//                     vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
+//                 </Highlight>
+//                 <PathParameters />
+//                 <AddPathParameters />
 
 
 
-export default function Lab3() {
+//             </div>
+//         </Provider>
+
+//     )
+// }
+
+function Lab3Content() {
+    const { todos } = useSelector((state: any) => state.todosReducer);
     return (
-        <div id="wd-lab2">
+        <>
             <h2>Lab 3</h2>
+            <ListGroup>
+                {todos.map((todo: any) => (
+                    <ListGroupItem key={todo.id}>{todo.title}</ListGroupItem>
+                ))}
+            </ListGroup>
+            <hr />
             <h3>Intro to TypeScript</h3>
             <VariablesAndConstants />
             <VariableTypes />
@@ -82,7 +158,16 @@ export default function Lab3() {
 
 
 
-        </div>
+        </>
+    );
+}
 
-    )
+export default function Lab3() {
+    return (
+        <Provider store={store}>
+            <div id="wd-lab3">
+                <Lab3Content />
+            </div>
+        </Provider>
+    );
 }

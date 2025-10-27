@@ -6,9 +6,10 @@ import { Nav, NavItem, NavLink } from "react-bootstrap";
 export default function TOC() {
   const pathname = usePathname(); //for highlighting the active nav item
   const links = [
-    { href: "/Labs/Lab1", label: "Lab1", id: "wd-labs-link" },
-    { href: "/Labs/Lab2", label: "Lab2", id: "wd-lab1-link" },
-    { href: "/Labs/Lab3", label: "Lab3", id: "wd-lab2-link" },
+    { href: "/Labs/Lab1", label: "Lab1", id: "wd-lab1-link" },
+    { href: "/Labs/Lab2", label: "Lab2", id: "wd-lab2-link" },
+    { href: "/Labs/Lab3", label: "Lab3", id: "wd-lab3-link" },
+    { href: "/Labs/Lab4", label: "Lab4", id: "wd-lab4-link" },
     { href: "/", label: "Kambaz", id: "wd-kambaz-link" },
     { href: "https://github.com/jichunling", label: "My GitHub", id: "wd-github-link" }
   ]

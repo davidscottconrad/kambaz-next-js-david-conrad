@@ -39,11 +39,11 @@ export default function KambazNavigation() {
       {/* as={Link}: client - side navigation — no full reload.The transition feels smooth and fast.*/}
       {links.map(({ href, label, icon: Icon }) => (
 
-        <ListGroupItem key={href} as={Link} href={href}
+        <ListGroupItem key={`${href}-${label}`} as={Link} href={href}
           className={`${pathname.includes(label) ? "bg-white text-danger"
             : "bg-black text-white"} text-center border-0`} >
           {/* React treats capitalized identifiers as components*/}
-          {/* If you kept it lowercase (icon), <icon /> would be treated as a DOM ta*/}
+          {/* If you kept it lowercase (icon), <icon /> would be treated as a DOM tag*/}
           <Icon className="fs-1 text-danger" /> <br />
           {label}
         </ListGroupItem>
