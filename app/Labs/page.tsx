@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default function Labs() {
-  redirect("Labs/Lab1")
+  redirect("Labs/Lab1");
+  return null;
 }
 //    return (
 //  <div id="wd-labs">
