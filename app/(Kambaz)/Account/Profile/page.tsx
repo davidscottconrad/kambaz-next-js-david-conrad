@@ -1,26 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Link from "next/link";
 import { Form, Button, FormControl } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 //Copy global currentUser to local profile state variable for editing
 
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const fetchProfile = () => {
-    if (!currentUser) return navigate("/Kambaz/Account/Signin");
+    if (!currentUser) return router.push("/Kambaz/Account/Signin");
     setProfile(currentUser);
   };
   const signout = () => {
     dispatch(setCurrentUser(null));
-    navigate("/Kambaz/Account/Signin");
+    router.push("/Kambaz/Account/Signin");
   };
   useEffect(() => { fetchProfile(); }, []);
 
