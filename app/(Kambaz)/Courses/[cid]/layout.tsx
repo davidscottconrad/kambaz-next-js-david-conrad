@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
@@ -15,9 +16,9 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
     <div id="wd-courses">
       <h2 className="text-danger">
         <Fa.FaAlignJustify className="me-4 fs-4 mb-1" />
-        {/* adding the Optional Chaining operator (?.)
-is a safe guard that prevents a JavaScript crash (runtime error) 
-if the course object is ever null or undefined when the component renders. */}
+        {/* adding the Optional Chaining operator (?.).
+
+This is a safe guard that prevents a JavaScript crash (runtime error) if the course object is ever null or undefined when the component renders. */}
         {course?.name} </h2> <hr />
       <div className="d-flex">
         <div className="d-none d-md-block">

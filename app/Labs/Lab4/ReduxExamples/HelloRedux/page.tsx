@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector, useDispatch } from "react-redux";
 
 //State Transformer: A reducer is the only way to change the state in a Redux application. 

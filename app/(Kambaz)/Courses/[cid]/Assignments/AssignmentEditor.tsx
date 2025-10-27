@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal, Button, FormControl, Form, Row, Col } from "react-bootstrap";
 import React from "react";
 

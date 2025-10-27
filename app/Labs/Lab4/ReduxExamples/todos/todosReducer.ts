@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 //todos is the actual array holding all the data, 
 //and todo is just a template or a placeholder object.

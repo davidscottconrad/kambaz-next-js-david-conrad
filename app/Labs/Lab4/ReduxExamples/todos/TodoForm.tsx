@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ListGroupItem, Button, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux"; //use selector to read and write to the reducer
 import { addTodo, updateTodo, setTodo } from "./todosReducer"; //use reducer functions to mutate state
