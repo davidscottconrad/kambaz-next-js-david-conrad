@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
