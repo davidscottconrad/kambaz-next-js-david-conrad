@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import * as db from "../../Database";
@@ -14,14 +15,14 @@ import { Form, Button } from "react-bootstrap";
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const signin = () => {
     const user = db.users.find(
       (u: any) => u.username === credentials.username && u.password === credentials.password);
     if (!user) return;
     dispatch(setCurrentUser(user));
     //after successful login --->dashboard
-    navigate("/Kambaz/Dashboard");
+    router.push("/Account/Profile");
   };
 
   return (

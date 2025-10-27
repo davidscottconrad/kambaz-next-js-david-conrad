@@ -1,11 +1,12 @@
+"use client"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
-import { useLocation } from "react-router-dom";
+import { usePathname } from 'next/navigation';
 import { useSelector } from "react-redux";
 export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 }
 // import Link from "next/link";
 // export default function AccountNavigation() {

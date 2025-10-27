@@ -6,26 +6,56 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentSideBtn from "./AssignmentSideBtn";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical, BsFileEarmarkText } from "react-icons/bs";
+import { FaTrash } from "react-icons/fa";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { deleteAssignment } from './reducer';
 import { prettyDate } from "../../../utils/dateUtils";
+import { useState } from "react";
+import { Modal, Button } from 'react-bootstrap';
 
+type AssignmentType = {
+  _id: string;
+  course: string | number;
+  title?: string;
+  name?: string;
+  points?: number;
+  dueDate?: string;
+  availableFrom?: string;
+  until?: string;
+};
 export default function Assignments() {
   const { cid } = useParams() as { cid: string };
+  const dispatch = useDispatch();
   const { assignments } = useSelector((s: any) => s.assignmentReducer) as {
-    assignments: Array<{
-      _id: string;
-      course: string | number;
-      title?: string; // if you still have legacy data
-      name?: string;
-      points?: number;
-      dueDate?: string;
-      availableFrom?: string;
-      until?: string;
-    }>;
+    assignments: AssignmentType[];
+  };
+  // ✅ 1. State for Delete Confirmation Modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<AssignmentType | null>(null);
+
+  // ✅ 2. Handler to show the modal
+  const handleDeleteClick = (a: AssignmentType, event: React.MouseEvent) => {
+    event.preventDefault(); // Stop Link navigation
+    event.stopPropagation(); // Stop click from propagating up to Link
+    setAssignmentToDelete(a);
+    setShowDeleteModal(true);
   };
 
+  // ✅ 3. Handler to confirm deletion
+  const handleDeleteConfirm = () => {
+    if (assignmentToDelete) {
+      dispatch(deleteAssignment(assignmentToDelete._id));
+    }
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
+
+  // ✅ 4. Handler to cancel deletion
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
   return (
     <div>
       <AssignmentControls /><br /><br /><br />
@@ -68,6 +98,8 @@ export default function Assignments() {
                   <div className="flex-fill">
                     <div className="fw-semibold mb-1">{title}</div>
 
+
+
                     <div className="small mb-1">
                       <span className="text-danger text-decoration-none">Multiple Modules</span>
                       <span className="mx-2 text-muted">|</span>
@@ -86,6 +118,13 @@ export default function Assignments() {
                   </div>
 
                   <div className="ms-auto d-flex align-items-center">
+                    <button
+                      className="btn btn-sm text-danger me-3 p-0" // me-3 for separation
+                      onClick={(e) => handleDeleteClick(a, e)} // Use the new handler
+                      aria-label={`Delete ${title}`}
+                    >
+                      <FaTrash className="fs-5" />
+                    </button>
                     <AssignmentSideBtn />
                   </div>
                 </ListGroupItem>
@@ -93,6 +132,23 @@ export default function Assignments() {
             );
           })}
       </ListGroup>
+      <Modal show={showDeleteModal} onHide={handleDeleteCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove assignment: <br />
+          **"{assignmentToDelete?.title || assignmentToDelete?.name || 'Untitled Assignment'}"**?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDeleteCancel}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
