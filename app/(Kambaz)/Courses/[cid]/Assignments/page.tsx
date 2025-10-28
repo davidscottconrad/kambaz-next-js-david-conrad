@@ -31,6 +31,16 @@ export default function Modules() {
 
     const assignments: Assignments[] = db.assignments as unknown as Assignments[];
 
+    // Handlers required by ModuleControlButtons
+    const handleEditModule = (moduleId: string) => {
+        // TODO: implement edit behavior for assignments group
+        console.log("edit module", moduleId);
+    };
+    const handleDeleteModule = (moduleId: string) => {
+        // TODO: implement delete behavior for assignments group
+        console.log("delete module", moduleId);
+    };
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center">
@@ -62,8 +72,14 @@ export default function Modules() {
                         <div>
                             <BsGripVertical className="me-2 fs-3" /> Assignments
                         </div>
-                        <div className="d-flex flex-row "><div className="mx-2 border rounded px-2 border-dark">40% of Total</div>
-                            <ModuleControlButtons /></div>
+                        <div className="d-flex flex-row ">
+                            <div className="mx-2 border rounded px-2 border-dark">40% of Total</div>
+                            <ModuleControlButtons
+                                moduleId="assignments"
+                                editModule={handleEditModule}
+                                deleteModule={handleDeleteModule}
+                            />
+                        </div>
                     </div>
 
                     <ListGroup className="wd-lessons rounded-0 d-flex" style={{ minHeight: "80px", borderLeft: "6px solid green" }}>
