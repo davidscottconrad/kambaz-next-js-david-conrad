@@ -1,6 +1,8 @@
 [
     {
         "_id": "123",
+        "user": "123",
+        "course": "RS101",
         "username": "iron_man",
         "password": "stark123",
         "firstName": "Tony",
@@ -15,6 +17,8 @@
     },
     {
         "_id": "234",
+        "user": "234",
+        "course": "RS102",
         "username": "dark_knight",
         "password": "wayne123",
         "firstName": "Bruce",
@@ -29,6 +33,8 @@
     },
     {
         "_id": "345",
+        "user": "345",
+        "course": "RS104",
         "username": "black_widow",
         "password": "romanoff123",
         "firstName": "Natasha",
@@ -43,6 +49,8 @@
     },
     {
         "_id": "456",
+        "user": "456",
+        "course": "RS103",
         "username": "thor_odinson",
         "password": "mjolnir123",
         "firstName": "Thor",
@@ -57,6 +65,8 @@
     },
     {
         "_id": "567",
+        "user": "567",
+        "course": "RS106",
         "username": "hulk_smash",
         "password": "banner123",
         "firstName": "Bruce",
@@ -71,6 +81,8 @@
     },
     {
         "_id": "678",
+        "user": "678",
+        "course": "RS107",
         "username": "ring_bearer",
         "password": "shire123",
         "firstName": "Frodo",
@@ -85,6 +97,8 @@
     },
     {
         "_id": "789",
+        "user": "789",
+        "course": "RS108",
         "username": "strider",
         "password": "aragorn123",
         "firstName": "Aragorn",
@@ -99,6 +113,8 @@
     },
     {
         "_id": "890",
+        "user": "890",
+        "course": "RS107",
         "username": "elf_archer",
         "password": "legolas123",
         "firstName": "Legolas",
@@ -113,6 +129,8 @@
     },
     {
         "_id": "777",
+        "user": "777",
+        "course": "RS101",
         "username": "ada",
         "password": "123",
         "firstName": "Ada",
@@ -124,5 +142,117 @@
         "section": "S101",
         "lastActivity": "1852-11-27",
         "totalActivity": "21:32:43"
+    },
+    {
+        "_id": "901",
+        "user": "654f9ec2ea7ead465908d1e3",
+        "course": "RS107",
+        "role": "FACULTY",
+        "section": "S101"
+    },
+    {
+        "_id": "902",
+        "user": "654f9ec2ea7ead465908d1e3",
+        "course": "RS108",
+        "role": "FACULTY",
+        "section": "S101"
+    },
+    {
+        "_id": "903",
+        "user": "123",
+        "course": "RS103",
+        "role": "FACULTY",
+        "section": "S102"
+    },
+    {
+        "_id": "904",
+        "user": "123",
+        "course": "RS106",
+        "role": "FACULTY",
+        "section": "S101"
+    },
+    {
+        "_id": "905",
+        "user": "234",
+        "course": "RS101",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "906",
+        "user": "234",
+        "course": "RS104",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "907",
+        "user": "345",
+        "course": "RS101",
+        "role": "TA",
+        "section": "S101"
+    },
+    {
+        "_id": "908",
+        "user": "345",
+        "course": "RS106",
+        "role": "TA",
+        "section": "S101"
+    },
+    {
+        "_id": "909",
+        "user": "456",
+        "course": "RS101",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "910",
+        "user": "456",
+        "course": "RS102",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "911",
+        "user": "567",
+        "course": "RS101",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "912",
+        "user": "678",
+        "course": "RS108",
+        "role": "FACULTY",
+        "section": "S101"
+    },
+    {
+        "_id": "913",
+        "user": "789",
+        "course": "RS107",
+        "role": "TA",
+        "section": "S101"
+    },
+    {
+        "_id": "914",
+        "user": "890",
+        "course": "RS108",
+        "role": "STUDENT",
+        "section": "S101"
+    },
+    {
+        "_id": "915",
+        "user": "777",
+        "course": "RS102",
+        "role": "ADMIN",
+        "section": "S101"
+    },
+    {
+        "_id": "916",
+        "user": "654f9ec2ea7ead465908d1e3",
+        "course": "RS101",
+        "role": "FACULTY",
+        "section": "S101"
     }
 ]

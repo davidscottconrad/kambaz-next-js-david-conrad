@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewCourse } from "../Courses/reducer";
-
+import * as db from "../Database";
 interface Course {
     _id: string;
     name: string;
@@ -18,7 +18,8 @@ interface Course {
 
 export default function Dashboard() {
     const { courses } = useSelector((state: any) => state.coursesReducer);
-
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const { enrollments } = db;
     const dispatch = useDispatch();
     // const [courses, setCourses] = useState<any[]>(db.courses);
     const [course, setCourse] = useState<any>({
@@ -26,9 +27,6 @@ export default function Dashboard() {
         startDate: "2023-09-10", endDate: "2023-12-15",
         description: "New Description"
     });
-
-
-
 
     return (
         <div id="wd-dashboard" className="container">
@@ -46,17 +44,29 @@ export default function Dashboard() {
             <hr />
 
             <hr />
-            <h2 id="wd-dashboard-published">Published Courses (8)</h2>
+            <h2 id="wd-dashboard-published">Published Courses ({courses.filter((course) =>
+                enrollments.some(
+                    (enrollment) =>
+                        enrollment.user === currentUser?._id &&
+                        enrollment.course === course?._id
+                )
+            ).length})</h2>
             <hr />
             <div className="row">
-                {courses.map((course: Course) => (
-                    <DashboardCourse
-                        key={course._id}
-                        id={course._id}
-                        title={`${course.number} ${course.name}`}
-                        description={course.description}
-                    />
-                ))}
+                {courses.filter((course) =>
+                    enrollments.some(
+                        (enrollment) =>
+                            enrollment.user === currentUser?._id &&
+                            enrollment.course === course?._id
+                    ))
+                    .map((course: Course) => (
+                        <DashboardCourse
+                            key={course._id}
+                            id={course._id}
+                            title={`${course.number} ${course.name}`}
+                            description={course.description}
+                        />
+                    ))}
             </div>
         </div >
     );
