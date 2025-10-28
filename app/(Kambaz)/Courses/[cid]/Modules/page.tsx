@@ -12,7 +12,6 @@ import { addModule as addModuleAction, deleteModule as deleteModuleAction, updat
 
 export default function Modules() {
     const { cid } = useParams();
-    console.log("Modules cid:", cid);
     const dispatch = useDispatch();
 
     // Read modules from Redux store
@@ -31,13 +30,10 @@ export default function Modules() {
     };
 
     const [moduleName, setModuleName] = useState("");
-    console.log("Modules moduleName:", moduleName);
     const addModule = () => {
         dispatch(addModuleAction({ name: moduleName, course: cid }));
         setModuleName("");
     };
-    console.log("Modules render", modules);
-
     return (
         <div>
             <ModulesControls moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />

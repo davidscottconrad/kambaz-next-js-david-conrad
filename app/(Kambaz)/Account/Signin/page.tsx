@@ -1,7 +1,29 @@
+"use client";
+import { redirect } from "next/dist/client/components/navigation";
+import { setCurrentUser } from "../reducer";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import * as db from "../../Database";
 import Link from "next/link";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import AccountNavigation from "../Navigation";
+import { Form, Row, Col, Button } from "react-bootstrap";
+
 export default function Signin() {
+  const [credentials, setCredentials] = useState<any>({ username: "", password: "" });
+  const dispatch = useDispatch();
+
+  const signin = () => {
+    const list: any[] = (db as any).users ?? (db as any).enrollments ?? [];
+    const user = list.find(
+      (u: any) =>
+        u.username === credentials.username &&
+        u.password === credentials.password
+    );
+    if (!user) return;
+    dispatch(setCurrentUser(user));
+    redirect("/Dashboard");
+  };
+
   return (
     <div id="wd-signin-screen" className="container mt-5">
       <AccountNavigation />
@@ -12,9 +34,13 @@ export default function Signin() {
             <Row className="mb-3">
               <Col sm={12}>
                 <Form.Control
-                  type="text"
+                  value={credentials.username}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, username: e.target.value })
+                  }
+                  className="mb-2"
                   placeholder="username"
-                  className="wd-username"
+                  id="wd-username"
                 />
               </Col>
             </Row>
@@ -22,30 +48,36 @@ export default function Signin() {
             <Row className="mb-3">
               <Col sm={12}>
                 <Form.Control
-                  type="password"
+                  value={credentials.password}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, password: e.target.value })
+                  }
+                  className="mb-2"
                   placeholder="password"
-                  className="wd-password"
+                  type="password"
+                  id="wd-password"
                 />
               </Col>
             </Row>
 
             <Row className="mb-3">
               <Col sm={12}>
-                <Link href="/Dashboard" passHref legacyBehavior>
-                  <Button
-                    id="wd-signin-btn"
-                    variant="primary"
-                    className="w-100"
-                  >
-                    Sign in
-                  </Button>
-                </Link>
+                <Button
+                  onClick={signin}
+                  id="wd-signin-btn"
+                  className="w-100"
+                  variant="primary"
+                >
+                  Sign in
+                </Button>
               </Col>
             </Row>
 
             <Row>
               <Col sm={12} className="text-center">
-                <Link id="wd-signup-link" href="Signup">Sign up</Link>
+                <Link id="wd-signup-link" href="/Kambaz/Account/Signup">
+                  Sign up
+                </Link>
               </Col>
             </Row>
           </Form>
@@ -54,3 +86,4 @@ export default function Signin() {
     </div>
   );
 }
+
