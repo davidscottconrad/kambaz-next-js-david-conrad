@@ -1,58 +1,36 @@
 "use client";
 
 import Link from "next/link";
-
-
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
-
 import { Button } from "react-bootstrap";
 import { FaPlus, FaClipboardCheck } from "react-icons/fa6";
-
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import AssignmentControls from "./AssignmentControls";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { useParams } from "next/navigation";
-import * as db from "../../../Database";
 import { useDispatch, useSelector } from "react-redux";
-
-
-import { addAssignment as addAssignmentAction, deleteAssignment as deleteAssignmentAction } from "./reducer";
-import { useState } from "react";
+import { deleteAssignment as deleteAssignmentAction } from "./reducer";
 import AssignmentControlButtons from "./AssignmentControlButtons";
+import { useRouter } from "next/navigation";
+
+
 export default function Modules() {
 
-
-
-
     const { cid } = useParams();
-
+    const router = useRouter();
     const assignments = useSelector((state: any) => state.assignments.assignments);
-
-    console.log("Assignments from Redux store:", assignments);
 
     const deleteAssignment = (assignmentId: string) => {
         dispatch(deleteAssignmentAction(assignmentId));
     };
-    const dispatch = useDispatch();
-    const [assignmentName, setAssignmentName] = useState("");
 
-    const addAssignment = () => {
-        dispatch(addAssignmentAction({ name: assignmentName, course: cid }));
-        setAssignmentName("");
-    };
-
-    // Handlers required by ModuleControlButtons
     const handleEditModule = (moduleId: string) => {
-        // TODO: implement edit behavior for assignments group
         console.log("edit module", moduleId);
     };
-    const handleDeleteModule = (moduleId: string) => {
-        // TODO: implement delete behavior for assignments group
-        console.log("delete module", moduleId);
-    };
+
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -69,7 +47,7 @@ export default function Modules() {
                 </InputGroup>
                 <div>
                     <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn" onClick={() => {
-                        addAssignment();
+                        router.push(`/Courses/${cid}/Assignments/new/Editor`);
                     }}>
                         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                         Assignment

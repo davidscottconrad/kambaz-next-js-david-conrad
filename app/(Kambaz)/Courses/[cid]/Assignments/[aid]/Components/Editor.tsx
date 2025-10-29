@@ -5,11 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateAssignment as updateAssignmentAction } from "../../reducer"
+import { addAssignment as addAssignmentAction, updateAssignment as updateAssignmentAction } from "../../reducer"
 export default function Editor() {
     const { cid, aid } = useParams();
     const router = useRouter();
     const dispatch = useDispatch();
+    const isNew = String(aid) === "new";
 
     interface Assignment {
         _id: string;
@@ -27,20 +28,41 @@ export default function Editor() {
         assignTo?: string;
     }
 
-    // Read from Redux instead of the Database module
     const assignments: Assignment[] = useSelector((state: any) => state.assignments.assignments);
     const assignment = assignments.find((a: Assignment) => a._id === aid);
 
-    const [assignmentState, setAssignmentState] = useState<Assignment | undefined>(assignment);
-
-    if (!assignmentState) {
+    if (!isNew && !assignment) {
         return <div id="wd-assignments-editor">Assignment not found.</div>;
     }
 
+    const [assignmentState, setAssignmentState] = useState<Assignment>(() => {
+        if (isNew) {
+            return {
+                _id: "",
+                name: "",
+                course: String(cid),
+                points: 100,
+                due: "",
+                available: "",
+                availableUntil: "",
+                module: ["Assignments"],
+                description: "",
+                displayGradeAs: "percentage",
+                submissionType: "online",
+                onlineEntryOptions: [],
+                assignTo: "Everyone",
+            };
+        }
+        return assignment as Assignment;
+    });
+
     const handleSave = () => {
         if (!assignmentState.name?.trim()) return;
-        // Ensure id and course remain intact
-        dispatch(updateAssignmentAction(assignmentState));
+        if (isNew) {
+            dispatch(addAssignmentAction({ ...assignmentState, course: String(cid) }));
+        } else {
+            dispatch(updateAssignmentAction(assignmentState));
+        }
         router.push(`/Courses/${cid}/Assignments`);
     };
 

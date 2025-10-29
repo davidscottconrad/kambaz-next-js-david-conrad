@@ -9,12 +9,36 @@ const assignmentsSlice = createSlice({
     initialState,
     reducers: {
         addAssignment: (state, { payload: assignment }) => {
-            console.log("Adding assignment:", assignment);
+            const {
+                name,
+                course,
+                points,
+                due,
+                available,
+                availableUntil,
+                module,
+                description,
+                displayGradeAs,
+                submissionType,
+                onlineEntryOptions,
+                assignTo,
+                lessons,
+            } = assignment || {};
             const newAssignment: any = {
                 _id: uuidv4(),
-                lessons: [],
-                name: assignment.name,
-                course: assignment.course,
+                name,
+                course,
+                lessons: lessons ?? [],
+                points,
+                due,
+                available,
+                availableUntil,
+                module,
+                description,
+                displayGradeAs,
+                submissionType,
+                onlineEntryOptions,
+                assignTo,
             };
             state.assignments = [...state.assignments, newAssignment] as any;
         },
