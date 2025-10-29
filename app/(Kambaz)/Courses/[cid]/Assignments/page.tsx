@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
-import ModuleControlButtons from "../Modules/ModuleControlButtons";
+
 import { Button } from "react-bootstrap";
 import { FaPlus, FaClipboardCheck } from "react-icons/fa6";
 
@@ -16,10 +16,12 @@ import Form from "react-bootstrap/Form";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { useParams } from "next/navigation";
 import * as db from "../../../Database";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { addAssignment as addAssignmentAction } from "./reducer";
+
+import { addAssignment as addAssignmentAction, deleteAssignment as deleteAssignmentAction } from "./reducer";
 import { useState } from "react";
+import AssignmentControlButtons from "./AssignmentControlButtons";
 export default function Modules() {
 
 
@@ -27,6 +29,13 @@ export default function Modules() {
 
     const { cid } = useParams();
 
+    const assignments = useSelector((state: any) => state.assignments.assignments);
+
+    console.log("Assignments from Redux store:", assignments);
+
+    const deleteAssignment = (assignmentId: string) => {
+        dispatch(deleteAssignmentAction(assignmentId));
+    };
     const dispatch = useDispatch();
     const [assignmentName, setAssignmentName] = useState("");
 
@@ -34,18 +43,6 @@ export default function Modules() {
         dispatch(addAssignmentAction({ name: assignmentName, course: cid }));
         setAssignmentName("");
     };
-
-    interface Assignments {
-        _id: string;
-        name: string;
-        course: string;
-        points?: number;
-        due?: string;
-        available?: string;
-        module?: string[];
-    }
-
-    const assignments: Assignments[] = db.assignments as unknown as Assignments[];
 
     // Handlers required by ModuleControlButtons
     const handleEditModule = (moduleId: string) => {
@@ -92,11 +89,7 @@ export default function Modules() {
                         </div>
                         <div className="d-flex flex-row ">
                             <div className="mx-2 border rounded px-2 border-dark">40% of Total</div>
-                            <ModuleControlButtons
-                                moduleId="assignments"
-                                editModule={handleEditModule}
-                                deleteModule={handleDeleteModule}
-                            />
+
                         </div>
                     </div>
 
@@ -114,8 +107,12 @@ export default function Modules() {
                                                 <span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> {assignment.available} | Due {assignment.due} | {assignment.points}pts
                                             </div>
                                         </div>
-
-                                        <AssignmentControls />
+                                        <AssignmentControlButtons
+                                            assignmentId={assignment._id}
+                                            editAssignment={handleEditModule}
+                                            deleteAssignment={deleteAssignment}
+                                        />
+                                        {/* <AssignmentControls /> */}
 
                                     </ListGroupItem>
 
