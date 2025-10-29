@@ -16,9 +16,25 @@ import Form from "react-bootstrap/Form";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { useParams } from "next/navigation";
 import * as db from "../../../Database";
+import { useDispatch } from "react-redux";
+
+import { addAssignment as addAssignmentAction } from "./reducer";
+import { useState } from "react";
 export default function Modules() {
 
+
+
+
     const { cid } = useParams();
+
+    const dispatch = useDispatch();
+    const [assignmentName, setAssignmentName] = useState("");
+
+    const addAssignment = () => {
+        dispatch(addAssignmentAction({ name: assignmentName, course: cid }));
+        setAssignmentName("");
+    };
+
     interface Assignments {
         _id: string;
         name: string;
@@ -55,7 +71,9 @@ export default function Modules() {
                     />
                 </InputGroup>
                 <div>
-                    <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn">
+                    <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-module-btn" onClick={() => {
+                        addAssignment();
+                    }}>
                         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                         Assignment
                     </Button>

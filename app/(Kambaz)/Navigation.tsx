@@ -48,7 +48,7 @@ export default function KambazNavigation() {
         active={pathname.startsWith("/Account")}
       >
         <Link
-          href="/Account/Signin"
+          href="/Account"
           id="wd-account-link"
           className={`d-block text-decoration-none ${pathname.startsWith("/Account") ? "text-danger" : "text-white"
             }`}
