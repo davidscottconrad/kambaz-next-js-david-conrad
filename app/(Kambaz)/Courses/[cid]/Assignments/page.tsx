@@ -15,12 +15,27 @@ import { deleteAssignment as deleteAssignmentAction } from "./reducer";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { useRouter } from "next/navigation";
 
+// Add types for assignments and Redux state
+type Assignment = {
+    _id: string;
+    course: string;
+    name: string;
+    available?: string;
+    due?: string;
+    points?: number;
+};
+
+interface RootState {
+    assignments: {
+        assignments: Assignment[];
+    };
+}
 
 export default function Modules() {
 
-    const { cid } = useParams();
+    const { cid } = useParams<{ cid: string }>();
     const router = useRouter();
-    const assignments = useSelector((state: any) => state.assignments.assignments);
+    const assignments = useSelector((state: RootState) => state.assignments.assignments);
 
     const deleteAssignment = (assignmentId: string) => {
         dispatch(deleteAssignmentAction(assignmentId));
@@ -73,8 +88,8 @@ export default function Modules() {
 
                     <ListGroup className="wd-lessons rounded-0 d-flex" style={{ minHeight: "80px", borderLeft: "6px solid green" }}>
                         {assignments
-                            .filter((assignment) => assignment.course === cid)
-                            .map((assignment, idx) => {
+                            .filter((assignment: Assignment) => assignment.course === cid)
+                            .map((assignment: Assignment, idx: number) => {
                                 return (
 
                                     <ListGroupItem key={idx} className="wd-lesson p-2 d-flex align-items-center">
