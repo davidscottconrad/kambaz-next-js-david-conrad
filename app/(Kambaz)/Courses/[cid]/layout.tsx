@@ -1,16 +1,31 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import CourseNavigation from "./Navigation";
 // import { courses } from "../../Database";
 import { FaAlignJustify } from "react-icons/fa";
 import Breadcrumb from "./Breadcrumb";
 import { useSelector } from "react-redux";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
   const { courses } = useSelector((state: any) => state.coursesReducer);
   const course = courses.find((course: any) => course._id === cid);
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const enrollments: any[] = useSelector(
+    (state: any) => state.enrollments?.enrollments ?? []
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!cid) return;
+    const enrolled =
+      !!currentUser &&
+      enrollments.some((e: any) => e.user === currentUser._id && e.course === cid);
+    if (!enrolled) router.replace("/Dashboard");
+  }, [currentUser, enrollments, cid, router]);
+
   return (
     <div id="wd-courses">
 
