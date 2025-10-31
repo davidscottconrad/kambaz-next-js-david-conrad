@@ -86,11 +86,11 @@ export default function QuizEditor() {
                 <Form.Label column sm={2}>Quiz Type</Form.Label>
                 <Col sm={5}>
                     <Form.Select defaultValue="Quiz Type" onChange={(e) => setType(e.target.value)}>
-                        <option selected>Quiz Type</option>
-                        <option value="1">Graded Quiz</option>
-                        <option value="2">Practice Quiz</option>
-                        <option value="3">Graded Survey</option>
-                        <option value="3">Ungraded Survey</option>
+                        <option>Quiz Type</option>
+                        <option>Graded Quiz</option>
+                        <option>Practice Quiz</option>
+                        <option>Graded Survey</option>
+                        <option>Ungraded Survey</option>
                     </Form.Select>
                 </Col>
             </Form.Group>
@@ -138,7 +138,6 @@ export default function QuizEditor() {
                     <Form.Control
                         type="number"
                         defaultValue="20 Minitues"
-                        value={timeLimit}
                         onChange={(e) => setTimeLimit(parseInt(e.target.value || "0", 10))}
                     />
                 </Col>
