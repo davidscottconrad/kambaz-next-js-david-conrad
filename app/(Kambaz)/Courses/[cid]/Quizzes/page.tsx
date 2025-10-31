@@ -12,6 +12,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useState } from "react";
 import { deleteQuiz } from './reducer';
 
+
 export default function QuizType() {
     type QuizType = {
         _id: string;
@@ -24,11 +25,13 @@ export default function QuizType() {
         availableFrom?: string;
         until?: string;
     };
+    type QuizSliceState = { quizReducer: { quizzes: QuizType[] } };
     const { cid } = useParams() as { cid: string };
     const dispatch = useDispatch();
-    const { quizzes } = useSelector((q: any) => q.quizReducer) as {
+    const { quizzes } = useSelector((q: QuizSliceState) => q.quizReducer) as {
         quizzes: QuizType[];
     };
+
 
     // ✅ 1. State for Delete Confirmation Modal
     const [showDeleteModal, setShowDeleteModal] = useState(false);
