@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement } from "./counterReducer";
+import { RootState } from "../../store";
 export default function CounterRedux() {
     //anything in the store can be accessed
-    const { count } = useSelector((state: any) => state.counterReducer);
+    const { count } = useSelector((state: RootState) => state.counterReducer);
 
     //dispatch is a function used to send an action to the Redux store.
     //It is the only way to trigger a state change in a Redux application

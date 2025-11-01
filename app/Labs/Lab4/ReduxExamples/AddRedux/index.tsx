@@ -4,6 +4,7 @@ import { Button, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { add } from "./addReducer";
+import { RootState } from "../../store";
 export default function AddRedux() {
     //most fundamental and widely used Hooks in React. 
     //It allows functional components to manage state—data that c
@@ -15,7 +16,7 @@ export default function AddRedux() {
     //现实中经常 combinelocal & global state 一起
     const [a, setA] = useState(12); //local component state
     const [b, setB] = useState(23);
-    const { sum } = useSelector((state: any) => state.addReducer); //global application state
+    const { sum } = useSelector((state: RootState) => state.addReducer); //global application state
     const dispatch = useDispatch();
     return (
         <div className="w-25" id="wd-add-redux">
