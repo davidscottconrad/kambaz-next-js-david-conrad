@@ -10,7 +10,9 @@ import QuizSideBtn from "./QuizSideBtn";
 import { LuRocket } from "react-icons/lu";
 import { Modal, Button } from 'react-bootstrap';
 import { useState } from "react";
-import { deleteQuiz } from './reducer';
+import { deleteQuiz, updateQuiz } from './reducer';
+import { RootState } from "../../../store";
+
 
 export default function QuizType() {
     type QuizType = {
@@ -23,10 +25,11 @@ export default function QuizType() {
         dueDate?: string;
         availableFrom?: string;
         until?: string;
+        published?: boolean;
     };
     const { cid } = useParams() as { cid: string };
     const dispatch = useDispatch();
-    const { quizzes } = useSelector((q: any) => q.quizReducer) as {
+    const { quizzes } = useSelector((q: RootState) => q.quizReducer) as {
         quizzes: QuizType[];
     };
 
@@ -70,11 +73,13 @@ export default function QuizType() {
                 {quizzes
                     .filter((q) => String(q.course) === String(cid))
                     .map((q) => {
+
                         const title = q.title ?? "(Untitled)";
-                        const due = prettyDate(q.dueDate) ?? "No due date";
+                        const due = prettyDate(q.dueDate) ?? "2025-01-10";
                         const avail = prettyDate(q.availableFrom);
                         const pts = q.points ?? 0;
                         const questionNum = q.questions ?? 0;
+                        const initialPublished = Boolean((q as any).published);
 
                         return (
                             <Link
@@ -113,7 +118,11 @@ export default function QuizType() {
                                     </div>
 
                                     <div className="ms-auto d-flex align-items-center">
-                                        <QuizSideBtn />
+                                        <QuizSideBtn qid={q._id}
+                                            initialPublished={initialPublished}
+                                            onDelete={() => dispatch(deleteQuiz(q._id))}
+                                            onPublishChange={(published) =>
+                                                dispatch(updateQuiz({ _id: q._id, changes: { published } }))} />
                                     </div>
                                 </ListGroupItem>
                             </Link>

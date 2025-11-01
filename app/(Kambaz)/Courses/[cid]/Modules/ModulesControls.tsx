@@ -4,7 +4,6 @@ import GreenCheckmark from "./GreenCheckmark";
 import ModuleEditor from "./ModuleEditor";
 import { useState } from "react";
 
-
 export default function ModulesControls({ moduleName, setModuleName, addModule }:
     { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
     const [show, setShow] = useState(false);
@@ -31,8 +30,6 @@ export default function ModulesControls({ moduleName, setModuleName, addModule }
                         <DropdownItem id="wd-publish-modules-only">
                             <GreenCheckmark /> Publish modules only
                         </DropdownItem>
-                        {/* Create two more items with IDs wd-unpublish-all-modules-and-items and wd-unpublish-modules-only with
-             labels Unpublish all modules and items and Unpublish modules only */}
                         <DropdownItem id="wd-publish-all-modules-and-items">
                             <GreenCheckmark /> Unpublish all modules
                         </DropdownItem>
@@ -50,7 +47,6 @@ export default function ModulesControls({ moduleName, setModuleName, addModule }
                 </Button>
                 <ModuleEditor show={show} handleClose={handleClose} dialogTitle="Add Module"
                     moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />
-
             </div>
         );
     }

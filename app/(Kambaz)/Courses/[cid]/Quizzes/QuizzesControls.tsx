@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import { IoEllipsisVertical } from "react-icons/io5";
 
 // Define the template for a new assignment object
-const newAssignmentTemplate = {
+const setnewQuizTemplate = {
     name: "New Assignment",
     description: "",
     points: 100,
@@ -21,19 +21,19 @@ const newAssignmentTemplate = {
     availableFrom: new Date().toISOString().substring(0, 10),
     availableUntil: "",
 };
-export default function AssignmentControls() {
+export default function QuizControls() {
     const { cid } = useParams() as { cid: string }; // Get the course ID
     const dispatch = useDispatch();
     // 1. State for controlling the modal visibility
     const [showModal, setShowModal] = useState(false);
 
     // 2. State for holding the data of the assignment being created/edited
-    const [newAssignment, setNewAssignment] = useState(newAssignmentTemplate);
+    const [newQuiz, setnewQuiz] = useState(setnewQuizTemplate);
 
     // Handlers for the modal
     const handleShow = () => {
         // Reset to the template when opening for a new assignment
-        setNewAssignment(newAssignmentTemplate);
+        setnewQuiz(setnewQuizTemplate);
         setShowModal(true);
     };
     const handleClose = () => setShowModal(false);
@@ -42,7 +42,7 @@ export default function AssignmentControls() {
     const handleSave = () => {
         // Dispatch the action to create the new assignment
         dispatch(addAssignment({
-            ...newAssignment,
+            ...newQuiz,
             _id: uuidv4(),
             course: cid, // Ensure the course ID is attached
         }));

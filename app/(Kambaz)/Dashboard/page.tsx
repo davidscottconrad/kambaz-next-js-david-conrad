@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-
+import { RootState } from "../store";
 import { useState } from "react"
 import Link from "next/link";
 import * as db from "../Database";
@@ -11,14 +11,14 @@ import { addNewCourse, deleteCourse, updateCourse } from "../Courses/[cid]/reduc
 
 
 export default function Dashboard() {
-  //之后再补上下面两行！！！！！！！！！！！！！！
-  //const { currentUser } = useSelector((state: any) => state.accountReducer);
-  //const { enrollments } = db;
+
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { enrollments } = db;
 
   //the main array that holds the entire list of data
   //【global state】
   //any: tells the TypeScript compiler: "Treat this value as if it could be any possible type, and don't bother checking it."
-  const { courses } = useSelector((state: any) => state.coursesReducer);
+  const { courses } = useSelector((state: RootState) => state.coursesReducer);
   //The useSelector hook receives the entire Redux store state object as its argument (the variable named 'state').
 
   const dispatch = useDispatch();
@@ -83,6 +83,10 @@ export default function Dashboard() {
       <FormControl as="textarea" value={course.description} rows={3}
         onChange={(e) => setCourse({ ...course, description: e.target.value })} />
 
+
+
+
+      {/*page 156 - 157还没更新 */}
 
       <h2 id="wd-dashboard-published">Published Courses({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses">

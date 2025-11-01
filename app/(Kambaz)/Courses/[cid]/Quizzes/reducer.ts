@@ -3,7 +3,6 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { quizzes } from "../../../Database";
 
-
 export type Quiz = { //还没有更新内容
   _id: string;
   course: string;           // keep as string for routing
@@ -24,6 +23,7 @@ export type Quiz = { //还没有更新内容
   oneQuestionAtATime?: string;
   webcamRequired? : string;
   lockQuestionAfterAsnwering?:string;
+  published?: boolean;
 };
 
 const normalize = (q: any): Quiz => ({
@@ -74,6 +74,10 @@ const quizzesSlice = createSlice({
                 payload.changes.title !== undefined
                   ? String(payload.changes.title)
                   : q.title,
+               published:
+                payload.changes.published !== undefined
+                  ? Boolean(payload.changes.published)
+                  : q.published,
               points:
                 payload.changes.points !== undefined
                   ? Number(payload.changes.points)

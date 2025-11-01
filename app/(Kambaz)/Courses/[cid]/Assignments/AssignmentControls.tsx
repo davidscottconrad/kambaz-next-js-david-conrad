@@ -11,6 +11,7 @@ import { useParams } from "next/navigation"
 import { useState } from "react"
 import { v4 as uuidv4 } from "uuid";
 
+
 // Define the template for a new assignment object
 const newAssignmentTemplate = {
     name: "New Assignment",

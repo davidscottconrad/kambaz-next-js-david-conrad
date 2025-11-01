@@ -3,7 +3,6 @@
 import { addModule, editModule, updateModule, deleteModule } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
-import * as db from "../../../Database";
 import { FormControl } from "react-bootstrap"
 import ModulesControls from "./ModulesControls";
 import { ListGroup, ListGroupItem } from "react-bootstrap"
@@ -11,23 +10,12 @@ import LessonControlButtons from "./LessonControlButtons"
 import ModuleControlButtons from "./ModuleControlButtons"
 import { BsGripVertical } from "react-icons/bs";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-type Lesson = {
-  id: string;
-  name: string;
-};
-
-type Modules = {
-  id: string;
-  course: string;   // course id
-  name: string;
-  lessons?: Lesson[];
-};
+import { RootState } from "../../../store";
 
 export default function Modules() {
   const { cid } = useParams();
   const [moduleName, setModuleName] = useState(""); //这些还是local state
-  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const { modules } = useSelector((state: RootState) => state.modulesReducer);
   const dispatch = useDispatch();
 
   return (

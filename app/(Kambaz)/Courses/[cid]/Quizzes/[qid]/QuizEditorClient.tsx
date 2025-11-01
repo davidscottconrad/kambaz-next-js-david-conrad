@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import type { Quiz } from "../reducer";
-import type { RootState } from "../../store"; // <-- adjust path to your store
+import type { RootState } from "../../../../store";
 
 // ---------- helpers ----------
 const isEmpty = (v: unknown): v is null | undefined | "" =>

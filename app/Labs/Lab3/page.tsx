@@ -35,7 +35,7 @@ import Highlight from "./Highlight"
 import PathParameters from "./PathParameters"
 import AddPathParameters from "./AddPathParameters"
 import { Provider } from "react-redux";
-import store from "../store";
+import store from "../Lab4/store";
 import { useSelector } from "react-redux";
 import { ListGroup, ListGroupItem } from "react-bootstrap"
 

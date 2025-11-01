@@ -1,13 +1,15 @@
+"use client";
 import { useState, forwardRef, MouseEvent } from "react";
 import { Dropdown } from "react-bootstrap";
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { BsBan } from "react-icons/bs";
+import { useRouter, useParams } from "next/navigation";
 
 
 type QuizSideBtnProps = {
+    qid: string;
     initialPublished?: boolean;              // default: unpublished
-    onEdit?: () => void;
     onDelete?: () => void;
     onPublishChange?: (published: boolean) => void;
 };
@@ -35,24 +37,29 @@ const IconToggle = forwardRef<HTMLButtonElement, { onClick?: (e: MouseEvent) => 
 IconToggle.displayName = "IconToggle";
 
 export default function QuizSideBtn({
+    qid,
     initialPublished = false,
-    onEdit,
     onDelete,
-    onPublishChange,
+    onPublishChange
 }: QuizSideBtnProps) {
     const [published, setPublished] = useState(initialPublished);
+    const router = useRouter();
+    const { cid } = useParams() as { cid: string };
 
-    const togglePublish = (e: MouseEvent) => {
+    const stop = (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+    };
+    const togglePublish = (e: MouseEvent) => {
+        stop(e);
         const next = !published;
         setPublished(next);
         onPublishChange?.(next);
     };
 
-    const stop = (e: MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleEdit = (e: MouseEvent) => {
+        stop(e);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/QuizEditorClient`);
     };
 
     return (
@@ -68,7 +75,7 @@ export default function QuizSideBtn({
             <Dropdown align="end">
                 <Dropdown.Toggle as={IconToggle} id="quiz-actions-toggle" />
                 <Dropdown.Menu onClick={stop}>
-                    <Dropdown.Item onClick={onEdit}>Edit</Dropdown.Item>
+                    <Dropdown.Item onClick={handleEdit}>Edit</Dropdown.Item>
                     <Dropdown.Item onClick={onDelete}>Delete</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={togglePublish}>
