@@ -13,6 +13,8 @@ import { deleteAssignment } from './reducer';
 import { prettyDate } from "../../../utils/dateUtils";
 import { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
+import { RootState } from "../../../store"
+
 
 type AssignmentType = {
   _id: string;
@@ -27,7 +29,7 @@ type AssignmentType = {
 export default function Assignments() {
   const { cid } = useParams() as { cid: string };
   const dispatch = useDispatch();
-  const { assignments } = useSelector((s: any) => s.assignmentReducer) as {
+  const { assignments } = useSelector((s: RootState) => s.assignmentReducer) as {
     assignments: AssignmentType[];
   };
   // ✅ 1. State for Delete Confirmation Modal

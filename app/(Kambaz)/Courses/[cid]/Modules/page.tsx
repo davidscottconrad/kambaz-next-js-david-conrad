@@ -11,6 +11,7 @@ import LessonControlButtons from "./LessonControlButtons"
 import ModuleControlButtons from "./ModuleControlButtons"
 import { BsGripVertical } from "react-icons/bs";
 import { useState } from "react";
+import { RootState } from "../../../store"
 import { v4 as uuidv4 } from "uuid";
 type Lesson = {
   id: string;
@@ -27,7 +28,7 @@ type Modules = {
 export default function Modules() {
   const { cid } = useParams();
   const [moduleName, setModuleName] = useState(""); //这些还是local state
-  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const { modules } = useSelector((state: RootState) => state.modulesReducer);
   const dispatch = useDispatch();
 
   return (
