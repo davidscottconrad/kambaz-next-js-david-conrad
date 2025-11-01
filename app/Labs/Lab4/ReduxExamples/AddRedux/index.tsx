@@ -4,7 +4,7 @@ import { Button, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { add } from "./addReducer";
-import { RootState } from "../../store";
+import { RootState } from "../../../store";
 export default function AddRedux() {
     //most fundamental and widely used Hooks in React. 
     //It allows functional components to manage state—data that c

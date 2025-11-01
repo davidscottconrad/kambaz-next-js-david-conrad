@@ -1,7 +1,7 @@
 "use client"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store";
+import { RootState } from "../../../store";
 
 //State Transformer: A reducer is the only way to change the state in a Redux application. 
 //It acts as a translator, reading an intent (the action) and executing the corresponding state update.
