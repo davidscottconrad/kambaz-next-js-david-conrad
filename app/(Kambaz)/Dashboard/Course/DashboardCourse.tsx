@@ -5,30 +5,45 @@ import "./dashboard.css";
 import { Card, CardBody, CardText, CardTitle } from "react-bootstrap";
 import { useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { deleteCourse, updateCourse } from "../../Courses/reducer";
+import { deleteCourse } from "../../Courses/reducer";
 
 type DashboardCourseProps = {
     id: string;
     title: string;
     description: string;
+    onEdit: (courseId: string) => void;
+    showAll: boolean;
 };
 
 export default function DashboardCourse({
     id,
     title,
     description,
+    onEdit,
+    showAll,
 }: DashboardCourseProps) {
     const dispatch = useDispatch();
-    const randomColor = useMemo(() => `rgb(${Math.floor(Math.random() * 256)},
-                          ${Math.floor(Math.random() * 256)},
-                          ${Math.floor(Math.random() * 256)})`, []);
+
+    const randomColor = useMemo(
+        () =>
+            `rgb(${Math.floor(Math.random() * 256)},
+                  ${Math.floor(Math.random() * 256)},
+                  ${Math.floor(Math.random() * 256)})`,
+        []
+    );
 
     const handleDelete = (e: React.MouseEvent) => {
-        e.preventDefault(); // Prevent the Link navigation
+        e.preventDefault();
         e.stopPropagation();
         if (window.confirm(`Are you sure you want to delete this course?`)) {
             dispatch(deleteCourse(id));
         }
+    };
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onEdit(id);
     };
 
     return (
@@ -39,34 +54,49 @@ export default function DashboardCourse({
                     style={{ textDecoration: "none" }}
                     className="wd-dashboard-course-link"
                 >
-                    <Card id="card-wrapper">
+                    <Card id="card-wrapper" className="h-100 d-flex flex-column justify-content-between">
                         <div
                             className="color-div"
                             style={{ backgroundColor: randomColor }}
                         ></div>
-                        <CardBody>
-                            <CardTitle className="card-title-dash text-nowrap overflow-hidden">
-                                {title}
-                            </CardTitle>
-                            <CardText
-                                className="card-text-dash overflow-hidden"
-                                style={{ maxHeight: "40px", overflow: "auto", textDecoration: "none" }}
-                            >
-                                {description}
-                            </CardText>
-                            <button
-                                onClick={handleDelete}
-                                className="btn btn-danger btn-sm m-2"
-                            >
-                                Delete
-                            </button>
-                            <button className="btn btn-warning btn-sm m-2"
-                                onClick={updateCourse} id="wd-update-course-click">
-                                Edit </button>
+
+                        <CardBody className="d-flex flex-column justify-content-between">
+                            <div>
+                                <CardTitle className="card-title-dash text-nowrap overflow-hidden">
+                                    {title}
+                                </CardTitle>
+                                <CardText
+                                    className="card-text-dash overflow-hidden"
+                                    style={{
+                                        maxHeight: "40px",
+                                        overflow: "auto",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    {description}
+                                </CardText>
+                            </div>
+
+                            {showAll && (
+                                <div className="mt-3 d-flex justify-content-center">
+                                    <button
+                                        onClick={handleDelete}
+                                        className="btn btn-danger btn-sm m-2"
+                                    >
+                                        Delete
+                                    </button>
+                                    <button
+                                        className="btn btn-warning btn-sm m-2"
+                                        onClick={handleEdit}
+                                        id="wd-edit-course-click"
+                                    >
+                                        Edit
+                                    </button>
+                                </div>
+                            )}
                         </CardBody>
                     </Card>
                 </Link>
-
             </div>
         </div>
     );

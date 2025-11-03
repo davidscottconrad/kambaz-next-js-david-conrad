@@ -3,7 +3,7 @@ import DashboardCourse from "./Course/DashboardCourse";
 import { useState, useMemo } from "react";
 import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse } from "../Courses/reducer";
+import { addNewCourse, updateCourse } from "../Courses/reducer";
 import { enroll, unenroll } from "../Enrollments/reducer";
 
 interface Course {
@@ -32,7 +32,6 @@ export default function Dashboard() {
         description: "New Description",
     });
 
-    // false = show only enrolled (Student View), true = show all (Enrollments View)
     const [showAll, setShowAll] = useState(false);
 
     const isEnrolled = (courseId: string) =>
@@ -43,6 +42,15 @@ export default function Dashboard() {
         if (showAll) return courses;
         return courses.filter((c: Course) => isEnrolled(c._id));
     }, [showAll, courses, enrollments, currentUser]);
+
+    const handleEditCourse = (courseId: string) => {
+        console.log("Editing course", courseId);
+        const selected = courses.find((c) => c._id === courseId);
+        if (selected) {
+            console.log("Editing course:", selected);
+            setCourse(selected);
+        }
+    };
 
     return (
         <div id="wd-dashboard" className="container">
@@ -56,10 +64,18 @@ export default function Dashboard() {
                     {showAll ? "Student View" : "Enrollments"}
                 </button>
             </h1>
+
             {showAll && (
                 <div>
                     <h5 className="mt-3">
                         New Course
+                        <button
+                            className="btn btn-warning float-end me-2"
+                            id="wd-update-course-click"
+                            onClick={() => dispatch(updateCourse(course))}
+                        >
+                            Update
+                        </button>
                         <button
                             className="btn btn-primary float-end"
                             id="wd-add-new-course-click"
@@ -83,6 +99,7 @@ export default function Dashboard() {
                     <hr />
                 </div>
             )}
+
             <h2 id="wd-dashboard-published">Published Courses ({visibleCourses.length})</h2>
             <hr />
             <div className="row g-4 mb-5">
@@ -95,9 +112,12 @@ export default function Dashboard() {
                                     id={c._id}
                                     title={`${c.number} ${c.name}`}
                                     description={c.description}
+                                    onEdit={handleEditCourse}
+                                    showAll={showAll} // 👈 pass it down
                                 />
+
                                 {currentUser && showAll && (
-                                    <div className=" d-flex justify-content-center mb-4">
+                                    <div className="d-flex justify-content-center mb-4">
                                         <button
                                             className={`btn mt-2 ${enrolled ? "btn-danger" : "btn-success"}`}
                                             onClick={() =>
