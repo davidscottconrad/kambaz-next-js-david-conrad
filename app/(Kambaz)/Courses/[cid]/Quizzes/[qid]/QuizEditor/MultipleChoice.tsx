@@ -7,7 +7,7 @@ import { useState } from "react";
 
 type Choice = { id: string; text: string };
 
-export default function MultipleChoice() {
+export default function MultipleChoice({ onCancel }: { onCancel?: () => void }) {
     const router = useRouter();
     const { cid, qid } = useParams<{ cid: string; qid: string }>();
     const [saving, setSaving] = useState(false);
@@ -28,7 +28,7 @@ export default function MultipleChoice() {
     }
 
     const handleCancel = () => {
-        // Dismiss edits: go back to the quiz page
+        if (onCancel) return onCancel();
         router.push(`/Courses/${cid}/Quizzes/${qid}`);
     };
 

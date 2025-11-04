@@ -7,7 +7,7 @@ import { useState } from "react";
 
 type BlankAns = { id: string; text: string };
 
-export default function FillInTheBlank() {
+export default function FillInTheBlank({ onCancel }: { onCancel?: () => void }) {
     const router = useRouter();
     const { cid, qid } = useParams<{ cid: string; qid: string }>();
     const [saving, setSaving] = useState(false);
@@ -28,6 +28,7 @@ export default function FillInTheBlank() {
     }
 
     const handleCancel = () => {
+        if (onCancel) return onCancel();
         router.push(`/Courses/${cid}/Quizzes/${qid}`);
     };
 

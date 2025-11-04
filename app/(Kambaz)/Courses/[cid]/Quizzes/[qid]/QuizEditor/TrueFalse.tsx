@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function TrueFalse() {
+export default function TrueFalse({ onCancel }: { onCancel?: () => void }) {
     const router = useRouter();
     const { cid, qid } = useParams<{ cid: string; qid: string }>();
     const [saving, setSaving] = useState(false);
@@ -16,6 +16,7 @@ export default function TrueFalse() {
     const [correct, setCorrect] = useState<boolean | null>(null);
 
     const handleCancel = () => {
+        if (onCancel) return onCancel();
         router.push(`/Courses/${cid}/Quizzes/${qid}`);
     };
 

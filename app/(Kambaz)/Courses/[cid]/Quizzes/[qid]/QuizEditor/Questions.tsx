@@ -30,9 +30,12 @@ export default function Questions() {
     };
 
     const newQuestion = () => {
-        // Add a new editor of the currently selected type
         setItems((prev) => [...prev, { id: newId(), type: questionType }]);
     }
+
+    const removeItem = (id: string) => {
+        setItems((prev) => prev.filter((it) => it.id !== id));
+    };
 
     const handleSave = async () => {
         console.log("Saving quiz questions...");
@@ -74,9 +77,15 @@ export default function Questions() {
             <div className="d-flex flex-column gap-4">
                 {items.map((it) => (
                     <div key={it.id}>
-                        {it.type === "multiple-choice" && <MultipleChoice />}
-                        {it.type === "true-false" && <TrueFalse />}
-                        {it.type === "fill-in-the-blank" && <FillInTheBlank />}
+                        {it.type === "multiple-choice" && (
+                            <MultipleChoice onCancel={() => removeItem(it.id)} />
+                        )}
+                        {it.type === "true-false" && (
+                            <TrueFalse onCancel={() => removeItem(it.id)} />
+                        )}
+                        {it.type === "fill-in-the-blank" && (
+                            <FillInTheBlank onCancel={() => removeItem(it.id)} />
+                        )}
                     </div>
                 ))}
             </div>
