@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { updateQuiz, addQuiz, Quiz } from "../../reducer";
 import Questions from "./Questions";
+import TrueFalse from "./TrueFalse";
 
 
 export default function QuizEditor() {
@@ -274,6 +275,7 @@ export default function QuizEditor() {
 
                 <Tab eventKey="quizzes" title="Quizzes">
                     <Questions />
+
                 </Tab>
             </Tabs>
         </div>

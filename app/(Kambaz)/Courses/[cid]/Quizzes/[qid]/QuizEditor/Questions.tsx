@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import MultipleChoice from "./MultipleChoice";
+import TrueFalse from "./TrueFalse";
+import FillInTheBlank from "./FillInTheBlank";
 
 export default function Questions() {
     const router = useRouter();
@@ -38,6 +40,8 @@ export default function Questions() {
             </div>
             <hr />
             <MultipleChoice />
+            <TrueFalse />
+            <FillInTheBlank />
             <div className="d-flex gap-2 justify-content-center">
                 <Button variant="danger" onClick={handleCancel} disabled={saving}>
                     Cancel
