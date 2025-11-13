@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import * as client from "./client";
 export default function WorkingWithObjectsAsynchronously() {

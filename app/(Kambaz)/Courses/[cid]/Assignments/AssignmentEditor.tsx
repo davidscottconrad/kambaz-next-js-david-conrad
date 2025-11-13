@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal, Button, FormControl, Form, Row, Col } from "react-bootstrap";
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addAssignment, updateAssignment, deleteAssignment, editAssignment, setAssignment } from './reducer';
 import { RootState } from "../../../store"
 import * as assignmentClient from "./client";
@@ -28,6 +28,7 @@ export default function AssignmentEditor({
     setAssignment,
     addAssignment,
 }: AssignmentModalProps) {
+    const dispatch = useDispatch();
 
     // Helper function to update any field in the assignment object
     const updateField = (field: string, value: any) => {
@@ -39,7 +40,7 @@ export default function AssignmentEditor({
         return null;
     }
     console.log("Rendering modal!");
-    const dispatch = useDispatch();
+
     const saveAssignment = async (assignment: any) => {
         await assignmentClient.updateAssignment(assignment);
         dispatch(updateAssignment(assignment));
