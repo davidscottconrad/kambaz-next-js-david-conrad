@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { useRouter } from "next/navigation";
+import * as client from "../client";
 
 //Copy global currentUser to local profile state variable for editing
 
@@ -19,9 +20,16 @@ export default function Profile() {
     if (!currentUser) return router.push("/Kambaz/Account/Signin");
     setProfile(currentUser);
   };
-  const signout = () => {
-    dispatch(setCurrentUser(null));
-    router.push("/Kambaz/Account/Signin");
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
+
+
+  const signout = async () => {
+    await client.signout();           //1. tell the server first
+    dispatch(setCurrentUser(null));   //2. clear out locally
+    router.push("/Account/Signin");
   };
   useEffect(() => { fetchProfile(); }, []);
 
@@ -47,7 +55,9 @@ export default function Profile() {
             <option value="USER">User</option>            <option value="ADMIN">Admin</option>
             <option value="FACULTY">Faculty</option>      <option value="STUDENT">Student</option>
           </select>
-          <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
+          <button className="btn btn-primary" onClick={updateProfile}>Update </button>
+
+          <Button onClick={signout} className="mb-2 btn btn-danger float-end" id="wd-signout-btn">
             Sign out
           </Button>
           <Button onClick={() => dispatch(setCurrentUser(profile))}>Save</Button>

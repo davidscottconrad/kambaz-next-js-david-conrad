@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal, Button, FormControl, Form, Row, Col } from "react-bootstrap";
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment, updateAssignment, deleteAssignment, editAssignment, setAssignment } from './reducer';
+import { RootState } from "../../../store"
+import * as assignmentClient from "./client";
 
 // Define the required props for the modal wrapper
 type AssignmentModalProps = {
@@ -29,6 +33,18 @@ export default function AssignmentEditor({
     const updateField = (field: string, value: any) => {
         setAssignment({ ...assignment, [field]: value });
     };
+    console.log("AssignmentEditor rendering with show =", show);
+    if (!show) {
+        console.log("Not rendering modal because show is false");
+        return null;
+    }
+    console.log("Rendering modal!");
+    const dispatch = useDispatch();
+    const saveAssignment = async (assignment: any) => {
+        await assignmentClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
+
 
     return (
         <Modal show={show} onHide={handleClose} size="lg">
@@ -137,7 +153,7 @@ export default function AssignmentEditor({
                 <Button
                     variant="danger"
                     onClick={() => {
-                        addAssignment();
+                        saveAssignment(assignment);
                         handleClose(); // Close the modal after saving
                     }}
                 >

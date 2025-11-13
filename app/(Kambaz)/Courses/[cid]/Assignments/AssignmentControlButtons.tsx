@@ -1,5 +1,4 @@
-import { IoEllipsisVertical } from "react-icons/io5";
-
+import { IoEllipsisVertical } from "react-icons/io5"; import { FaTrash } from "react-icons/fa";
 import { BsPlus } from 'react-icons/bs';
 export default function AssignmentControlButtons() {
     return (
@@ -9,3 +8,5 @@ export default function AssignmentControlButtons() {
             <IoEllipsisVertical className="fs-4" />
         </div>);
 }
+
+

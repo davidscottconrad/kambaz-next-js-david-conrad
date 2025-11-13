@@ -9,35 +9,52 @@ import { BsGripVertical, BsFileEarmarkText } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteAssignment } from './reducer';
+import { addAssignment, updateAssignment, deleteAssignment, editAssignment, setAssignment } from './reducer';
 import { prettyDate } from "../../../utils/dateUtils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button } from 'react-bootstrap';
 import { RootState } from "../../../store"
+import * as coursesClient from "../../client";
+import * as assignmentClient from "./client";
 
 
-type AssignmentType = {
-  _id: string;
-  course: string | number;
-  title?: string;
-  name?: string;
-  points?: number;
-  dueDate?: string;
-  availableFrom?: string;
-  until?: string;
-};
+
+// type AssignmentType = {
+//   _id: string;
+//   course: string | number;
+//   title?: string;
+//   name?: string;
+//   points?: number;
+//   dueDate?: string;
+//   availableFrom?: string;
+//   until?: string;
+// };
 export default function Assignments() {
   const { cid } = useParams() as { cid: string };
+  const [assignmentName, setAssignmentName] = useState("");
+
   const dispatch = useDispatch();
-  const { assignments } = useSelector((s: RootState) => s.assignmentReducer) as {
-    assignments: AssignmentType[];
+  const { assignments } = useSelector((s: RootState) => s.assignmentReducer);
+  const fetchAssignments = async () => {
+    try {
+      console.log("Fetching assignments for course:", cid);
+      const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+      console.log("Received assignments from API:", assignments);
+      dispatch(setAssignment(assignments));
+      console.log("Dispatched to Redux");
+    } catch (error) {
+      console.error("Error fetching assignments:", error);
+    }
+
+    //Without dispatch, the data would live only inside that function; 
+    //other components wouldn’t see or update from it.
   };
   // ✅ 1. State for Delete Confirmation Modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [assignmentToDelete, setAssignmentToDelete] = useState<AssignmentType | null>(null);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<any | null>(null);
 
   // ✅ 2. Handler to show the modal
-  const handleDeleteClick = (a: AssignmentType, event: React.MouseEvent) => {
+  const handleDeleteClick = (a: any, event: React.MouseEvent) => {
     event.preventDefault(); // Stop Link navigation
     event.stopPropagation(); // Stop click from propagating up to Link
     setAssignmentToDelete(a);
@@ -58,6 +75,34 @@ export default function Assignments() {
     setShowDeleteModal(false);
     setAssignmentToDelete(null);
   };
+
+  const onCreateAssignmentForCourse = async () => {
+    if (!cid) return;
+    const newAssignment = { name: assignmentName, course: cid };
+    const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+    dispatch(setAssignment([...assignments, assignment]));
+  };
+  const onRemoveAssignment = async (assignmentId: string) => {
+    await assignmentClient.deleteAssignment(assignmentId);
+    const newAssignment = assignments.filter((a: any) => a._id !== assignmentId)
+    dispatch(setAssignment(newAssignment));
+    setShowDeleteModal(true);
+  };
+  const onUpdateAssignment = async (assignment: any) => {
+    await assignmentClient.updateAssignment(assignment);
+    const newAssignment = assignment.map((a: any) => a._id === assignment._id ? assignment : a);
+    dispatch(setAssignment(newAssignment));
+  };
+  const saveAssignment = async (assignment: any) => {
+    await assignmentClient.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  };
+
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
   return (
     <div>
       <AssignmentControls /><br /><br /><br />
@@ -70,13 +115,11 @@ export default function Assignments() {
         </ListGroupItem>
 
         {assignments
-          .filter((a) => String(a.course) === String(cid))
-          .map((a) => {
+          .map((a: any) => {
             const title = a.title ?? "(Untitled)";
             const due = prettyDate(a.dueDate) ?? "No due date";
             const avail = prettyDate(a.availableFrom);
             const pts = a.points ?? 0;
-
             return (
               <Link
                 key={a._id}
@@ -100,8 +143,6 @@ export default function Assignments() {
                   <div className="flex-fill">
                     <div className="fw-semibold mb-1">{title}</div>
 
-
-
                     <div className="small mb-1">
                       <span className="text-danger text-decoration-none">Multiple Modules</span>
                       <span className="mx-2 text-muted">|</span>
@@ -120,14 +161,16 @@ export default function Assignments() {
                   </div>
 
                   <div className="ms-auto d-flex align-items-center">
-                    <button
+                    {/* <button
                       className="btn btn-sm text-danger me-3 p-0" // me-3 for separation
                       onClick={(e) => handleDeleteClick(a, e)} // Use the new handler
                       aria-label={`Delete ${title}`}
                     >
                       <FaTrash className="fs-5" />
-                    </button>
-                    <AssignmentSideBtn />
+                    </button> */}
+                    <AssignmentSideBtn cid={cid} assignmentId={a._id}
+                      deleteAssignment={(assignmentId) => onRemoveAssignment(assignmentId)}
+                      editAssignment={(assignmentId) => onUpdateAssignment(assignmentId)} />
                   </div>
                 </ListGroupItem>
               </Link>

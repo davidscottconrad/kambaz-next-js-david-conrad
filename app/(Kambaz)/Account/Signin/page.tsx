@@ -2,27 +2,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
-import * as db from "../../Database";
+//import * as db from "../../Database";  That is the local DB
 import Link from "next/link";
-
-
+import * as client from "../client";
 import { Form, Button } from "react-bootstrap";
-
-
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
   const router = useRouter();
-  const signin = () => {
-    const user = db.users.find(
-      (u: any) => u.username === credentials.username && u.password === credentials.password);
+  //using local db:
+  //const signin = () => {
+  // const user = db.users.find(
+  //   (u: any) => u.username === credentials.username && u.password === credentials.password);
+
+  const signin = async () => { //async makes the function return a Promise
+    const user = await client.signin(credentials)
+    //await pauses the function until the Promise settles and then gives you its resolved value
     if (!user) return;
     dispatch(setCurrentUser(user));
-    //after successful login --->dashboard
-    router.push("/Account/Profile");
+    //after successful login --->Dashboard
+    redirect("/Dashboard");
   };
 
   return (
@@ -37,7 +39,7 @@ export default function Signin() {
         id="wd-password" placeholder="password" type="password" className="mb-2" />
       <Button onClick={signin} id="wd-signin-btn" className="w-100" > Sign in </Button>
 
-      <Link id="wd-signup-link" href="/Kambaz/Account/Signup">Sign up</Link>
+      <Link id="wd-signup-link" href="/Account/Signup">Sign Up</Link>
 
       {/* <input placeholder="username" /> <br />
      <input placeholder="password" type="password" />

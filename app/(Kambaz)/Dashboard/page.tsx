@@ -1,25 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link";
-import * as db from "../Database";
 import { FormControl, Col, Row, Card, CardImg, CardBody, CardTitle, CardText, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, deleteCourse, updateCourse } from "../Courses/[cid]/reducer";
+import {
+  addNewCourse, deleteCourse, updateCourse, setCourses,
+  setAllCourses, toggleShowAllCourses, enrollInCourse as enrollInCourseAction,
+  unenrollFromCourse as unenrollFromCourseAction,
+} from "../Courses/[cid]/reducer";
+import * as client from "../Courses/client";
+import { RootState } from "../store";
 
 
 export default function Dashboard() {
-  //之后再补上下面两行！！！！！！！！！！！！！！
+
   //const { currentUser } = useSelector((state: any) => state.accountReducer);
   //const { enrollments } = db;
 
   //the main array that holds the entire list of data
   //【global state】
   //any: tells the TypeScript compiler: "Treat this value as if it could be any possible type, and don't bother checking it."
-  const { courses } = useSelector((state: any) => state.coursesReducer);
+  const { courses, allCourses, showAllCourses } = useSelector((state: any) => state.coursesReducer
+  );
+
   //The useSelector hook receives the entire Redux store state object as its argument (the variable named 'state').
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
 
   const dispatch = useDispatch();
 
@@ -34,50 +41,119 @@ export default function Dashboard() {
     startDate: "2023-09-10", endDate: "2023-12-15",
     image: "/images/reactjs.jpg", description: "New Description"
   });
+  const fetchCourses = async () => {
+    try {
+      const courses = await client.findMyCourses();
+      dispatch(setCourses(courses));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchAllCourses = async () => {
+    try {
+      const courses = await client.fetchAllCourses();
+      dispatch(setCourses(courses));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const onAddNewCourse = async () => {
+    const newCourse = await client.createCourse(course);
+    dispatch(setCourses([...courses, newCourse]));
+  };
+  const onDeleteCourse = async (courseId: string) => {
+    const status = await client.deleteCourse(courseId);
+    //不确定这样改正确不？？
+    // dispatch(setCourses(courses.filter((course) =>
+    //   course._id !== courseId)));
+    dispatch(deleteCourse(courseId))
+  };
+  const onUpdateCourse = async () => {
+    await client.updateCourse(course);
+    //不确定这样改正确不？？
+    // dispatch(setCourses(courses.map((c) => {
+    //   if (c._id === course._id) { return course; }
+    //   else { return c; }
+    // })));
+    dispatch(updateCourse(course));
+  };
 
 
-  //implement an event handler to create new courses
-  // const addNewCourse = () => {
-  //   //create new instand of "Course" : newCourse
-  //   const newCourse = { ...course, _id: uuidv4() };//keep all the default value but override the primary key (id)
-  //   setCourses([...courses, newCourse]); //append the newCourse we just created at the end of the array
-  // };
-  // const deleteCourse = (courseId: string) => {
-  //   setCourses(courses.filter((course) => course._id !== courseId));
-  // };
-  // //loop over the courses array and update the one we editted
-  // const updateCourse = () => {
-  //   setCourses(
-  //     courses.map((c) => {
-  //       if (c._id === course._id) {
-  //         return course;
-  //       } else {
-  //         return c;
-  //       }
-  //     })
-  //   );
-  // };
 
+  // useEffect(() => {
+  //   fetchCourses();
+  // }, [currentUser]);
+  // Fetch enrolled courses and all courses on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const myCourses = await client.findMyCourses();
+        dispatch(setCourses(myCourses));
 
+        const allCoursesData = await client.fetchAllCourses();
+        dispatch(setAllCourses(allCoursesData));
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Determine which courses to display
+  const displayCourses = showAllCourses ? allCourses : courses;
+
+  // Check if user is enrolled in a course
+  const isEnrolled = (courseId: string) => {
+    return courses.some((c: any) => c._id === courseId);
+  };
+
+  // Handle enroll
+  const handleEnroll = async (courseId: string) => {
+    try {
+      await client.enrollInCourse(courseId);
+      dispatch(enrollInCourseAction(courseId));
+    } catch (error) {
+      console.error("Error enrolling:", error);
+    }
+  };
+
+  // Handle unenroll
+  const handleUnenroll = async (courseId: string) => {
+    try {
+      await client.unenrollFromCourse(courseId);
+      dispatch(unenrollFromCourseAction(courseId));
+    } catch (error) {
+      console.error("Error unenrolling:", error);
+    }
+  };
 
   //use the dispatch variable to send an action when an event occurs
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <h1 id="wd-dashboard-title">Dashboard</h1><hr />
+      {/* Enrollments Toggle Button */}
+      <div className="d-flex justify-content-end mb-3">
+        <button className="btn btn-primary float-end" id="wd-enrollments-click"
+          onClick={() => dispatch(toggleShowAllCourses())}> Enrollments </button>
+      </div>
+
+      <h2 id="wd-dashboard-published">
+        {showAllCourses ? "All Courses" : "Enrolled Courses"} ({displayCourses.length})
+      </h2>
+      <hr />
+
+
       <h5>New Course
         <button className="btn btn-primary float-end"
           id="wd-add-new-course-click"
-          onClick={() => dispatch(addNewCourse(course))} > Add </button> {/*calling function with no argument syntax */}
+          onClick={onAddNewCourse} > Add </button> {/*calling function with no argument syntax */}
         <button className="btn btn-warning float-end me-2"
-          onClick={() => dispatch(updateCourse(course))} id="wd-update-course-click">
+          onClick={onUpdateCourse} id="wd-update-course-click">
           Update
         </button>
 
       </h5><br />
 
-      {/*input element for each of fields in course state variable; 
-      Updat fields by using the setCourse mutator function
-      { ...course, name: e.target.value } keep all the other filed of the course, but override the name*/}
       <FormControl value={course.name} className="mb-2"
         onChange={(e) => setCourse({ ...course, name: e.target.value })} />
       <FormControl as="textarea" value={course.description} rows={3}
@@ -87,7 +163,7 @@ export default function Dashboard() {
       <h2 id="wd-dashboard-published">Published Courses({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses
+          {displayCourses
             .map((course: any) => (
               <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
                 <Card>
@@ -101,7 +177,35 @@ export default function Dashboard() {
                         {course.name} </CardTitle>
                       <CardText className="wd-dashboard-course-description overflow-hidden" style={{ height: "100px" }}>
                         {course.description} </CardText>
-                      <Button variant="primary"> Go </Button>
+                      <button className="btn btn-primary"> Go </button>
+
+                      {/* Enroll/Unenroll Buttons*/}
+
+                      <div className="mt-2">
+                        {isEnrolled(course._id) ? (
+                          <button className="btn-danger me-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleUnenroll(course._id);
+                            }}
+                          >
+                            Unenroll
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-success"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleEnroll(course._id);
+                            }}
+                          >
+                            Enroll
+                          </button>
+                        )}
+                      </div>
+
 
                       {/* (1) Delete button to invoke the deleteCourse event handler 
                         (2) "event.preventDefault()": stops the browser's default action from occurring when the event is triggered.
@@ -114,7 +218,7 @@ export default function Dashboard() {
 
                       <button onClick={(event) => {
                         event.preventDefault();
-                        dispatch(deleteCourse(course._id));
+                        onDeleteCourse(course._id);
                       }} className="btn btn-danger float-end"
                         id="wd-delete-course-click">
                         Delete
