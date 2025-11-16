@@ -1,7 +1,24 @@
+"use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { setCurrentUser } from "../reducer";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import * as client from "../client";
 import AccountNavigation from "../Navigation";
+
 export default function Signup() {
+    const [user, setUser] = useState<any>({});
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    const signup = async () => {
+        const currentUser = await client.signup(user)
+        dispatch(setCurrentUser(currentUser));
+        router.push("/Account/Profile");
+    };
+
     return (
         <div id="wd-signup-screen" className="container mt-5">
             <AccountNavigation />
@@ -15,6 +32,8 @@ export default function Signup() {
                                     type="text"
                                     placeholder="username"
                                     className="wd-username"
+                                    value={user.username || ""}
+                                    onChange={(e) => setUser({ ...user, username: e.target.value })}
                                 />
                             </Col>
                         </Row>
@@ -25,6 +44,8 @@ export default function Signup() {
                                     type="password"
                                     placeholder="password"
                                     className="wd-password"
+                                    value={user.password || ""}
+                                    onChange={(e) => setUser({ ...user, password: e.target.value })}
                                 />
                             </Col>
                         </Row>
@@ -41,11 +62,13 @@ export default function Signup() {
 
                         <Row className="mb-3">
                             <Col sm={12}>
-                                <Link href="Profile" passHref legacyBehavior>
-                                    <Button variant="primary" className="w-100">
-                                        Sign up
-                                    </Button>
-                                </Link>
+                                <Button
+                                    variant="primary"
+                                    className="w-100"
+                                    onClick={signup}
+                                >
+                                    Sign up
+                                </Button>
                             </Col>
                         </Row>
 
