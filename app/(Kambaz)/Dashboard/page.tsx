@@ -43,6 +43,11 @@ export default function Dashboard() {
         fetchCourses();
     }, [currentUser]);
 
+    const onAddNewCourse = async () => {
+        const newCourse = await client.createCourse(course);
+        dispatch(setCourses([...courses, newCourse]));
+    };
+
     const [showAll, setShowAll] = useState(false);
 
     const handleEditCourse = (courseId: string) => {
@@ -79,9 +84,9 @@ export default function Dashboard() {
                             Update
                         </button>
                         <button
+                            onClick={onAddNewCourse}
                             className="btn btn-primary float-end"
                             id="wd-add-new-course-click"
-                            onClick={() => dispatch(addNewCourse(course))}
                         >
                             Add
                         </button>
