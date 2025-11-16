@@ -71,7 +71,7 @@ export default function Signin() {
 
             <Row>
               <Col sm={12} className="text-center">
-                <Link id="wd-signup-link" href="/Kambaz/Account/Signup">
+                <Link id="wd-signup-link" href="/Account/Signup">
                   Sign up
                 </Link>
               </Col>

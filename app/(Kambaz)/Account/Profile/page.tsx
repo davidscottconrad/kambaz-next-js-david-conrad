@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { Button, FormControl } from "react-bootstrap";
+import * as client from "../client";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
@@ -12,10 +13,18 @@ export default function Profile() {
     if (!currentUser) return redirect("/Account/Signin");
     setProfile(currentUser);
   };
-  const signout = () => {
+  const signout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
     redirect("/Account/Signin");
   };
+  const updateProfile = async () => {
+    console.log("Updating profile:", profile);
+    const updatedProfile = await client.updateUser(profile);
+    console.log("Updated profile:", updatedProfile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -55,6 +64,7 @@ export default function Profile() {
           <Button onClick={signout} className="w-100 mb-2" variant="danger" id="wd-signout-btn">
             Sign out
           </Button>
+          <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>
         </div>
       )}
     </div>
