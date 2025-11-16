@@ -1,10 +1,11 @@
 "use client";
 import DashboardCourse from "./Course/DashboardCourse";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, updateCourse } from "../Courses/reducer";
+import { addNewCourse, updateCourse, setCourses } from "../Courses/reducer";
 import { enroll, unenroll } from "../Enrollments/reducer";
+import * as client from "../Courses/client";
 
 interface Course {
     _id: string;
@@ -19,9 +20,6 @@ export default function Dashboard() {
     const dispatch = useDispatch();
     const { courses }: { courses: Course[] } = useSelector((state: any) => state.coursesReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const enrollments: any[] = useSelector(
-        (state: any) => state.enrollments?.enrollments ?? []
-    );
 
     const [course, setCourse] = useState<Course>({
         _id: "0",
@@ -32,16 +30,20 @@ export default function Dashboard() {
         description: "New Description",
     });
 
+    const fetchCourses = async () => {
+        try {
+            const courses = await client.findMyCourses();
+            dispatch(setCourses(courses));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCourses();
+    }, [currentUser]);
+
     const [showAll, setShowAll] = useState(false);
-
-    const isEnrolled = (courseId: string) =>
-        !!currentUser &&
-        enrollments.some((e: any) => e.user === currentUser._id && e.course === courseId);
-
-    const visibleCourses = useMemo(() => {
-        if (showAll) return courses;
-        return courses.filter((c: Course) => isEnrolled(c._id));
-    }, [showAll, courses, enrollments, currentUser]);
 
     const handleEditCourse = (courseId: string) => {
         console.log("Editing course", courseId);
@@ -100,11 +102,10 @@ export default function Dashboard() {
                 </div>
             )}
 
-            <h2 id="wd-dashboard-published">Published Courses ({visibleCourses.length})</h2>
+            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
             <hr />
             <div className="row g-4 mb-5">
-                {visibleCourses.map((c: Course) => {
-                    const enrolled = isEnrolled(c._id);
+                {courses.map((c: Course) => {
                     return (
                         <div key={c._id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
                             <div className="h-100 d-flex flex-column">
@@ -113,20 +114,18 @@ export default function Dashboard() {
                                     title={`${c.number} ${c.name}`}
                                     description={c.description}
                                     onEdit={handleEditCourse}
-                                    showAll={showAll} // 👈 pass it down
+                                    showAll={showAll}
                                 />
 
                                 {currentUser && showAll && (
                                     <div className="d-flex justify-content-center mb-4">
                                         <button
-                                            className={`btn mt-2 ${enrolled ? "btn-danger" : "btn-success"}`}
+                                            className="btn btn-success mt-2"
                                             onClick={() =>
-                                                enrolled
-                                                    ? dispatch(unenroll({ userId: currentUser._id, courseId: c._id }))
-                                                    : dispatch(enroll({ userId: currentUser._id, courseId: c._id }))
+                                                dispatch(enroll({ userId: currentUser._id, courseId: c._id }))
                                             }
                                         >
-                                            {enrolled ? "Unenroll" : "Enroll"}
+                                            Enroll
                                         </button>
                                     </div>
                                 )}
