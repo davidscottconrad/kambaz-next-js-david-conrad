@@ -3,7 +3,7 @@ import DashboardCourse from "./Course/DashboardCourse";
 import { useState, useMemo, useEffect } from "react";
 import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, updateCourse, setCourses } from "../Courses/reducer";
+import { addNewCourse, updateCourse as updateCourseAction, setCourses } from "../Courses/reducer";
 import { enroll, unenroll } from "../Enrollments/reducer";
 import * as client from "../Courses/client";
 
@@ -48,6 +48,19 @@ export default function Dashboard() {
         dispatch(setCourses([...courses, newCourse]));
     };
 
+    const onDeleteCourse = async (courseId: string) => {
+        await client.deleteCourse(courseId);
+        dispatch(setCourses(courses.filter((course) => course._id !== courseId)));
+    };
+
+    const onUpdateCourse = async () => {
+        await client.updateCourse(course);
+        dispatch(setCourses(courses.map((c) => {
+            if (c._id === course._id) { return course; }
+            else { return c; }
+        })));
+    };
+
     const [showAll, setShowAll] = useState(false);
 
     const handleEditCourse = (courseId: string) => {
@@ -77,9 +90,9 @@ export default function Dashboard() {
                     <h5 className="mt-3">
                         New Course
                         <button
+                            onClick={onUpdateCourse}
                             className="btn btn-warning float-end me-2"
                             id="wd-update-course-click"
-                            onClick={() => dispatch(updateCourse(course))}
                         >
                             Update
                         </button>
@@ -119,6 +132,7 @@ export default function Dashboard() {
                                     title={`${c.number} ${c.name}`}
                                     description={c.description}
                                     onEdit={handleEditCourse}
+                                    onDelete={onDeleteCourse}
                                     showAll={showAll}
                                 />
 

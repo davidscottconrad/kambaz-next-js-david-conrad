@@ -4,14 +4,13 @@ import Link from "next/link";
 import "./dashboard.css";
 import { Card, CardBody, CardText, CardTitle } from "react-bootstrap";
 import { useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { deleteCourse } from "../../Courses/reducer";
 
 type DashboardCourseProps = {
     id: string;
     title: string;
     description: string;
     onEdit: (courseId: string) => void;
+    onDelete: (courseId: string) => void;
     showAll: boolean;
 };
 
@@ -20,10 +19,9 @@ export default function DashboardCourse({
     title,
     description,
     onEdit,
+    onDelete,
     showAll,
 }: DashboardCourseProps) {
-    const dispatch = useDispatch();
-
     const randomColor = useMemo(
         () =>
             `rgb(${Math.floor(Math.random() * 256)},
@@ -36,7 +34,7 @@ export default function DashboardCourse({
         e.preventDefault();
         e.stopPropagation();
         if (window.confirm(`Are you sure you want to delete this course?`)) {
-            dispatch(deleteCourse(id));
+            onDelete(id);
         }
     };
 
