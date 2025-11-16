@@ -7,18 +7,14 @@ import * as db from "../../Database";
 import Link from "next/link";
 import AccountNavigation from "../Navigation";
 import { Form, Row, Col, Button } from "react-bootstrap";
-
+import * as client from "../client";
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({ username: "", password: "" });
   const dispatch = useDispatch();
 
-  const signin = () => {
-    const list: any[] = (db as any).users ?? (db as any).enrollments ?? [];
-    const user = list.find(
-      (u: any) =>
-        u.username === credentials.username &&
-        u.password === credentials.password
-    );
+  const signin = async () => {
+    const user = await client.signin(credentials);
+    console.log("Signed in user:", user);
     if (!user) return;
     dispatch(setCurrentUser(user));
     redirect("/Dashboard");
