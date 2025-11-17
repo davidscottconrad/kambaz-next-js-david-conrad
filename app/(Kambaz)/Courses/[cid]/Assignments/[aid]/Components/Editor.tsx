@@ -2,10 +2,11 @@
 
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { addAssignment as addAssignmentAction, updateAssignment as updateAssignmentAction, setAssignments } from "../../reducer";
+import * as client from "../../../../client";
 
-import { addAssignment as addAssignmentAction, updateAssignment as updateAssignmentAction } from "../../reducer"
 export default function Editor() {
     const { cid, aid } = useParams();
     const router = useRouter();
@@ -29,9 +30,9 @@ export default function Editor() {
     }
 
     const assignments: Assignment[] = useSelector((state: any) => state.assignments.assignments);
-    const assignment = assignments.find((a: Assignment) => a._id === aid);
+    const assignmentItem = assignments.find((a: Assignment) => a._id === aid);
 
-    if (!isNew && !assignment) {
+    if (!isNew && !assignmentItem) {
         return <div id="wd-assignments-editor">Assignment not found.</div>;
     }
 
@@ -53,15 +54,22 @@ export default function Editor() {
                 assignTo: "Everyone",
             };
         }
-        return assignment as Assignment;
+        return assignmentItem as Assignment;
     });
 
-    const handleSave = () => {
+    // Save assignment using API
+    const handleSave = async () => {
         if (!assignmentState.name?.trim()) return;
+
         if (isNew) {
-            dispatch(addAssignmentAction({ ...assignmentState, course: String(cid) }));
+            const createdAssignment = await client.createAssignmentForCourse(String(cid), assignmentState);
+            dispatch(setAssignments([...assignments, createdAssignment]));
         } else {
-            dispatch(updateAssignmentAction(assignmentState));
+            await client.updateAssignment(assignmentState);
+            const newAssignments = assignments.map((a: any) =>
+                a._id === assignmentState._id ? assignmentState : a
+            );
+            dispatch(setAssignments(newAssignments));
         }
         router.push(`/Courses/${cid}/Assignments`);
     };

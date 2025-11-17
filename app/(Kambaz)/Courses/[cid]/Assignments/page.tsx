@@ -11,9 +11,11 @@ import Form from "react-bootstrap/Form";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment as deleteAssignmentAction } from "./reducer";
+import { deleteAssignment as deleteAssignmentAction, setAssignments } from "./reducer";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import * as client from "../../client";
 
 // Add types for assignments and Redux state
 type Assignment = {
@@ -32,20 +34,30 @@ interface RootState {
 }
 
 export default function Modules() {
-
     const { cid } = useParams<{ cid: string }>();
     const router = useRouter();
+    const dispatch = useDispatch();
     const assignments = useSelector((state: RootState) => state.assignments.assignments);
 
-    const deleteAssignment = (assignmentId: string) => {
-        dispatch(deleteAssignmentAction(assignmentId));
+    // Fetch assignments when component mounts
+    const fetchAssignments = async () => {
+        const fetchedAssignments = await client.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(fetchedAssignments));
     };
 
-    const handleEditModule = (moduleId: string) => {
-        console.log("edit module", moduleId);
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+
+    // Delete assignment using API
+    const deleteAssignment = async (assignmentId: string) => {
+        await client.deleteAssignment(assignmentId);
+        dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId)));
     };
 
-    const dispatch = useDispatch();
+    const handleEditModule = (assignmentId: string) => {
+        router.push(`/Courses/${cid}/Assignments/${assignmentId}/Editor`);
+    };
 
     return (
         <div>
@@ -82,41 +94,31 @@ export default function Modules() {
                         </div>
                         <div className="d-flex flex-row ">
                             <div className="mx-2 border rounded px-2 border-dark">40% of Total</div>
-
                         </div>
                     </div>
 
                     <ListGroup className="wd-lessons rounded-0 d-flex" style={{ minHeight: "80px", borderLeft: "6px solid green" }}>
-                        {assignments
-                            .filter((assignment: Assignment) => assignment.course === cid)
-                            .map((assignment: Assignment, idx: number) => {
-                                return (
-
-                                    <ListGroupItem key={idx} className="wd-lesson p-2 d-flex align-items-center">
-                                        <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
-                                        <div className="p-2">
-                                            <div><Link href={`/Courses/${cid}/Assignments/${assignment._id}/Editor`} className="text-decoration-none text-black fs-4">{assignment.name}</Link></div>
-                                            <div className="fs-6">
-                                                <span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> {assignment.available} | Due {assignment.due} | {assignment.points}pts
-                                            </div>
+                        {assignments.map((assignment: Assignment, idx: number) => {
+                            return (
+                                <ListGroupItem key={idx} className="wd-lesson p-2 d-flex align-items-center">
+                                    <BsGripVertical className="me-2 fs-4" size={35} /> <FaClipboardCheck size={40} color="green"></FaClipboardCheck>
+                                    <div className="p-2">
+                                        <div><Link href={`/Courses/${cid}/Assignments/${assignment._id}/Editor`} className="text-decoration-none text-black fs-4">{assignment.name}</Link></div>
+                                        <div className="fs-6">
+                                            <span className="text-danger">Multiple Modules</span> | <span className="fw-bold">Not Available until</span> {assignment.available} | Due {assignment.due} | {assignment.points}pts
                                         </div>
-                                        <AssignmentControlButtons
-                                            assignmentId={assignment._id}
-                                            editAssignment={handleEditModule}
-                                            deleteAssignment={deleteAssignment}
-                                        />
-                                        {/* <AssignmentControls /> */}
-
-                                    </ListGroupItem>
-
-                                )
-                            })
-                        }
+                                    </div>
+                                    <AssignmentControlButtons
+                                        assignmentId={assignment._id}
+                                        editAssignment={handleEditModule}
+                                        deleteAssignment={deleteAssignment}
+                                    />
+                                </ListGroupItem>
+                            )
+                        })}
                     </ListGroup>
                 </ListGroupItem>
             </ListGroup>
-
-
         </div>
     );
 }
