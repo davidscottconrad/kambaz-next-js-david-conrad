@@ -1,17 +1,15 @@
-import axios from "axios";
-const axiosWithCredentials = axios.create({ withCredentials: true });
-const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
-const COURSES_API = `${HTTP_SERVER}/api/courses`;
-const USERS_API = `${HTTP_SERVER}/api/users`;
+import { axiosWithCredentials } from "@/lib/axiosConfig";
+
+const COURSES_API = `${process.env.NEXT_PUBLIC_HTTP_SERVER}/api/courses`;
+const USERS_API = `${process.env.NEXT_PUBLIC_HTTP_SERVER}/api/users`;
 
 export const fetchAllCourses = async () => {
-    // Use axiosWithCredentials to include session cookies
-    const { data } = await axiosWithCredentials.get(COURSES_API);
+    const { data } = await axiosWithCredentials.get("/api/courses");
     return data;
 };
 
 export const findMyCourses = async () => {
-    const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
+    const { data } = await axiosWithCredentials.get("/api/users/current/courses");
     return data;
 };
 
