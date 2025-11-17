@@ -5,7 +5,8 @@ const COURSES_API = `${HTTP_SERVER}/api/courses`;
 const USERS_API = `${HTTP_SERVER}/api/users`;
 
 export const fetchAllCourses = async () => {
-    const { data } = await axios.get(COURSES_API);
+    // Use axiosWithCredentials to include session cookies
+    const { data } = await axiosWithCredentials.get(COURSES_API);
     return data;
 };
 
