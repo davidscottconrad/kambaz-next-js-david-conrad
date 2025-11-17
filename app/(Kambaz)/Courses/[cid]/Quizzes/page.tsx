@@ -69,7 +69,6 @@ export default function QuizType() {
 
                     </div>
                 </ListGroupItem>
-
                 {quizzes
                     .filter((q) => String(q.course) === String(cid))
                     .map((q) => {

@@ -4,7 +4,8 @@ import { Dropdown } from "react-bootstrap";
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { BsBan } from "react-icons/bs";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 
 
 type QuizSideBtnProps = {
@@ -43,7 +44,6 @@ export default function QuizSideBtn({
     onPublishChange
 }: QuizSideBtnProps) {
     const [published, setPublished] = useState(initialPublished);
-    const router = useRouter();
     const { cid } = useParams() as { cid: string };
 
     const stop = (e: MouseEvent) => {
@@ -56,14 +56,7 @@ export default function QuizSideBtn({
         setPublished(next);
         onPublishChange?.(next);
     };
-
-    const handleEdit = (e: MouseEvent) => {
-        stop(e);
-        router.push(`/Courses/${cid}/Quizzes/${qid}/QuizEditorClient`);
-    };
-
     return (
-        // guard so clicks never bubble to the wrapping <Link>
         <div className="ms-auto d-flex align-items-center gap-3" onClick={stop}>
             {published ? (
                 <GreenCheckmark aria-label="Published" />
@@ -71,11 +64,12 @@ export default function QuizSideBtn({
                 <BsBan className="text-danger fs-3" title="Unpublished" />
             )}
 
-            {/* Kebab dropdown */}
             <Dropdown align="end">
                 <Dropdown.Toggle as={IconToggle} id="quiz-actions-toggle" />
                 <Dropdown.Menu onClick={stop}>
-                    <Dropdown.Item onClick={handleEdit}>Edit</Dropdown.Item>
+                    <Link href={`/Courses/${cid}/Quizzes/${qid}/QuizEditor`}>
+                        <Dropdown.Item as="button" >Edit</Dropdown.Item>
+                    </Link>
                     <Dropdown.Item onClick={onDelete}>Delete</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={togglePublish}>
