@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import { FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewCourse, updateCourse as updateCourseAction, setCourses } from "../Courses/reducer";
-import { enroll, unenroll } from "../Enrollments/reducer";
 import * as client from "../Courses/client";
 
 interface Course {
@@ -16,10 +15,18 @@ interface Course {
     description: string;
 }
 
+interface Enrollment {
+    _id: string;
+    user: string;
+    course: string;
+}
+
 export default function Dashboard() {
     const dispatch = useDispatch();
     const { courses }: { courses: Course[] } = useSelector((state: any) => state.coursesReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+    const [allCourses, setAllCourses] = useState<Course[]>([]);
 
     const [course, setCourse] = useState<Course>({
         _id: "0",
@@ -39,18 +46,41 @@ export default function Dashboard() {
         }
     };
 
+    const fetchAllCourses = async () => {
+        try {
+            const courses = await client.fetchAllCourses();
+            setAllCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchEnrollments = async () => {
+        if (!currentUser) return;
+        try {
+            const userEnrollments = await client.findCoursesForUser(currentUser._id);
+            setEnrollments(userEnrollments);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         fetchCourses();
+        fetchAllCourses();
+        fetchEnrollments();
     }, [currentUser]);
 
     const onAddNewCourse = async () => {
         const newCourse = await client.createCourse(course);
         dispatch(setCourses([...courses, newCourse]));
+        await fetchAllCourses();
     };
 
     const onDeleteCourse = async (courseId: string) => {
         await client.deleteCourse(courseId);
         dispatch(setCourses(courses.filter((course) => course._id !== courseId)));
+        await fetchAllCourses();
     };
 
     const onUpdateCourse = async () => {
@@ -59,6 +89,33 @@ export default function Dashboard() {
             if (c._id === course._id) { return course; }
             else { return c; }
         })));
+        await fetchAllCourses();
+    };
+
+    const handleEnroll = async (courseId: string) => {
+        if (!currentUser) return;
+        try {
+            await client.enrollInCourse(currentUser._id, courseId);
+            await fetchEnrollments();
+            await fetchCourses();
+        } catch (error) {
+            console.error("Error enrolling:", error);
+        }
+    };
+
+    const handleUnenroll = async (courseId: string) => {
+        if (!currentUser) return;
+        try {
+            await client.unenrollFromCourse(currentUser._id, courseId);
+            await fetchEnrollments();
+            await fetchCourses();
+        } catch (error) {
+            console.error("Error unenrolling:", error);
+        }
+    };
+
+    const isEnrolled = (courseId: string) => {
+        return enrollments.some((e) => e.course === courseId);
     };
 
     const [showAll, setShowAll] = useState(false);
@@ -71,6 +128,8 @@ export default function Dashboard() {
             setCourse(selected);
         }
     };
+
+    const displayedCourses = showAll ? allCourses : courses;
 
     return (
         <div id="wd-dashboard" className="container">
@@ -85,7 +144,7 @@ export default function Dashboard() {
                 </button>
             </h1>
 
-            {showAll && (
+            {showAll && currentUser?.role === "FACULTY" && (
                 <div>
                     <h5 className="mt-3">
                         New Course
@@ -120,10 +179,13 @@ export default function Dashboard() {
                 </div>
             )}
 
-            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
+            <h2 id="wd-dashboard-published">
+                {showAll ? "All Courses" : "Published Courses"} ({displayedCourses.length})
+            </h2>
             <hr />
             <div className="row g-4 mb-5">
-                {courses.map((c: Course) => {
+                {displayedCourses.map((c: Course) => {
+                    const enrolled = isEnrolled(c._id);
                     return (
                         <div key={c._id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
                             <div className="h-100 d-flex flex-column">
@@ -138,14 +200,21 @@ export default function Dashboard() {
 
                                 {currentUser && showAll && (
                                     <div className="d-flex justify-content-center mb-4">
-                                        <button
-                                            className="btn btn-success mt-2"
-                                            onClick={() =>
-                                                dispatch(enroll({ userId: currentUser._id, courseId: c._id }))
-                                            }
-                                        >
-                                            Enroll
-                                        </button>
+                                        {enrolled ? (
+                                            <button
+                                                className="btn btn-danger mt-2"
+                                                onClick={() => handleUnenroll(c._id)}
+                                            >
+                                                Unenroll
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="btn btn-success mt-2"
+                                                onClick={() => handleEnroll(c._id)}
+                                            >
+                                                Enroll
+                                            </button>
+                                        )}
                                     </div>
                                 )}
                             </div>
