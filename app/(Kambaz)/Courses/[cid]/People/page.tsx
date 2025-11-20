@@ -1,10 +1,12 @@
 "use client";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
-import React from "react";
+import * as client from "@/app/(Kambaz)/Account/client";
 import * as db from "../../../Database";
 
-type Enrollment = {
+type User = {
     _id: string;
     username?: string;
     password?: string;
@@ -20,7 +22,19 @@ type Enrollment = {
 };
 
 export default function PeopleTable() {
-    const enrollments = db.enrollments as Enrollment[];
+    const [users, setUsers] = useState<User[]>([]);
+    const { cid } = useParams();
+    const { enrollments } = db;
+
+    const fetchUsers = async () => {
+        const allUsers = await client.findAllUsers();
+        setUsers(allUsers);
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, [cid]);
+
 
     return (
         <div id="wd-people-table">
@@ -36,20 +50,24 @@ export default function PeopleTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {enrollments
-                        .filter(enrollment => enrollment.section === "S101") // or filter by cid if needed
-                        .map(enrollment => (
-                            <tr key={enrollment._id}>
+                    {users
+                        .filter((user) =>
+                            enrollments.some((enrollment: any) =>
+                                enrollment.user === user._id && enrollment.course === cid
+                            )
+                        )
+                        .map((user) => (
+                            <tr key={user._id}>
                                 <td className="wd-full-name text-nowrap">
                                     <FaUserCircle className="me-2 fs-1 text-secondary" />
-                                    <span className="wd-first-name">{enrollment.firstName}</span>{" "}
-                                    <span className="wd-last-name">{enrollment.lastName}</span>
+                                    <span className="wd-first-name">{user.firstName}</span>{" "}
+                                    <span className="wd-last-name">{user.lastName}</span>
                                 </td>
-                                <td className="wd-login-id">{enrollment.loginId}</td>
-                                <td className="wd-section">{enrollment.section}</td>
-                                <td className="wd-role">{enrollment.role}</td>
-                                <td className="wd-last-activity">{enrollment.lastActivity}</td>
-                                <td className="wd-total-activity">{enrollment.totalActivity}</td>
+                                <td className="wd-login-id">{user.loginId}</td>
+                                <td className="wd-section">{user.section}</td>
+                                <td className="wd-role">{user.role}</td>
+                                <td className="wd-last-activity">{user.lastActivity}</td>
+                                <td className="wd-total-activity">{user.totalActivity}</td>
                             </tr>
                         ))}
                 </tbody>

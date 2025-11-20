@@ -4,7 +4,6 @@ export default function ModuleEditor({ show, handleClose, dialogTitle, moduleNam
     show: boolean; handleClose: () => void; dialogTitle: string; moduleName: string; setModuleName: (name: string) => void;
     addModule: () => void;
 }) {
-    console.log("ModuleEditor render", show);
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
