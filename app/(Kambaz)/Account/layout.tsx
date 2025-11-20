@@ -6,6 +6,7 @@ export default function AccountLayout({ children }: Readonly<{ children: ReactNo
 
       <div className="d-flex">
         <div>
+
           <AccountNavigation />
         </div>
         <div className="flex-fill">

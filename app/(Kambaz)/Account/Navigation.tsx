@@ -5,14 +5,17 @@ import { Nav, NavItem, NavLink } from "react-bootstrap";
 import { useSelector } from "react-redux";
 export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+  const links = currentUser
+    ? (currentUser.role === "ADMIN" ? ["Profile", "Users"] : ["Profile"])
+    : ["Signin", "Signup"];
   const pathname = usePathname();
+
   return (
     <Nav variant="pills">
 
       {links.map((link) => (
         <NavItem key={link}>
-          <NavLink className="text-danger text-decoration-none" as={Link} href={`/Account`} active={pathname.endsWith(link.toLowerCase())}>
+          <NavLink className="text-danger text-decoration-none" as={Link} href={`/Account/${link}`} active={pathname.endsWith(link.toLowerCase())}>
             {link} </NavLink> </NavItem>
       ))}
     </Nav>

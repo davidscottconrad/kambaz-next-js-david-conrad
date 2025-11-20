@@ -21,7 +21,6 @@ export default function Signup() {
 
     return (
         <div id="wd-signup-screen" className="container mt-5">
-            <AccountNavigation />
             <Row className="justify-content-center">
                 <Col md={6} lg={4}>
                     <h3 className="mb-4">Sign up</h3>

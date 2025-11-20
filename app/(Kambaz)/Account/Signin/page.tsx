@@ -22,7 +22,7 @@ export default function Signin() {
 
   return (
     <div id="wd-signin-screen" className="container mt-5">
-      <AccountNavigation />
+
       <Row className="justify-content-center">
         <Col md={6} lg={4}>
           <h3 className="mb-4">Sign in</h3>
