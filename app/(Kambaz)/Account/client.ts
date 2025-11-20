@@ -26,3 +26,8 @@ export const findAllUsers = async () => {
     console.log("findAllUsers response:", response.data);
     return response.data;
 };
+export const findUsersByRole = async (role: string) => {
+    const response = await
+        axiosWithCredentials.get(`${USERS_API}?role=${role}`);
+    return response.data;
+};
