@@ -144,7 +144,7 @@ export default function Dashboard() {
                 </button>
             </h1>
 
-            {showAll && currentUser?.role === "FACULTY" && (
+            {showAll && (currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN") && (
                 <div>
                     <h5 className="mt-3">
                         New Course
