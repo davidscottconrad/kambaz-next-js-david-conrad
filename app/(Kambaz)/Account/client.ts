@@ -17,10 +17,7 @@ export const signout = async () => {
     const response = await axiosWithCredentials.post(`${USERS_API}/signout`);
     return response.data;
 };
-export const updateUser = async (user: any) => {
-    const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
-    return response.data;
-};
+
 export const findAllUsers = async () => {
     const response = await axiosWithCredentials.get(USERS_API);
     console.log("findAllUsers response:", response.data);
@@ -39,3 +36,12 @@ export const findUserById = async (id: string) => {
     const response = await axiosWithCredentials.get(`${USERS_API}/${id}`);
     return response.data;
 };
+export const deleteUser = async (userId: string) => {
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}`);
+    return response.data;
+};
+export const updateUser = async (user: any) => {
+    const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
+    return response.data;
+};
+
