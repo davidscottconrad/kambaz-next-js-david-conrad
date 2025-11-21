@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import { findAllUsers, findUsersByRole, findUsersByPartialName } from "../client";
-
+import { findAllUsers, findUsersByRole, findUsersByPartialName, createUser } from "../client";
 import { FormControl } from "react-bootstrap";
+import { FaPlus } from "react-icons/fa";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<any[]>([]);
     const [role, setRole] = useState("");
-
     const [name, setName] = useState("");
+
     const fetchUsers = async () => {
         try {
             const allUsers = await findAllUsers();
@@ -34,9 +34,6 @@ export default function UsersPage() {
         } else {
             fetchUsers();
         }
-
-
-
     };
 
     const filterUsersByName = async (name: string) => {
@@ -49,9 +46,30 @@ export default function UsersPage() {
         }
     };
 
+    const createNewUser = async () => {
+        try {
+            const user = await createUser({
+                firstName: "New",
+                lastName: `User${users.length + 1}`,
+                username: `newuser${Date.now()}`,
+                password: "password123",
+                email: `email${users.length + 1}@neu.edu`,
+                section: "S101",
+                role: "STUDENT",
+            });
+            setUsers([...users, user]);
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
+    };
+
     return (
         <div id="wd-account-users-page">
             <h2>Users Page</h2>
+            <button onClick={createNewUser} className="float-end btn btn-danger wd-add-people mb-3">
+                <FaPlus className="me-2" />
+                Users
+            </button>
             <div className="d-flex mb-3">
                 <div className="me-4 d-flex flex-column">
                     <label htmlFor="wd-name-filter" className="form-label">Filter by Name:</label>
