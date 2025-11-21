@@ -39,8 +39,9 @@ export default function Dashboard() {
 
     const fetchCourses = async () => {
         try {
-            const courses = await client.findMyCourses();
-            dispatch(setCourses(courses));
+            const courseData = await client.findCoursesForUser(currentUser._id);
+            console.log("Fetched courses for user:", courseData);
+            dispatch(setCourses(courseData));
         } catch (error) {
             console.error(error);
         }
@@ -58,7 +59,8 @@ export default function Dashboard() {
     const fetchEnrollments = async () => {
         if (!currentUser) return;
         try {
-            const userEnrollments = await client.findCoursesForUser(currentUser._id);
+            const userEnrollments = await client.findEnrollmentsForUser(currentUser._id);
+            console.log("Fetched enrollments:", userEnrollments);
             setEnrollments(userEnrollments);
         } catch (error) {
             console.error(error);
@@ -66,9 +68,11 @@ export default function Dashboard() {
     };
 
     useEffect(() => {
-        fetchCourses();
-        fetchAllCourses();
-        fetchEnrollments();
+        if (currentUser) {
+            fetchCourses();
+            fetchAllCourses();
+            fetchEnrollments();
+        }
     }, [currentUser]);
 
     const onAddNewCourse = async () => {
@@ -122,7 +126,7 @@ export default function Dashboard() {
 
     const handleEditCourse = (courseId: string) => {
         console.log("Editing course", courseId);
-        const selected = courses.find((c) => c._id === courseId);
+        const selected = allCourses.find((c) => c._id === courseId) || courses.find((c) => c._id === courseId);
         if (selected) {
             console.log("Editing course:", selected);
             setCourse(selected);
