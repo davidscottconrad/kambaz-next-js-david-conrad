@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import { findAllUsers, findUsersByRole, findUsersByPartialName, createUser } from "../client";
 import { FormControl } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
+import PeopleDetails from "../../Courses/[cid]/People/Details";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<any[]>([]);
     const [role, setRole] = useState("");
     const [name, setName] = useState("");
+    const [showDetails, setShowDetails] = useState(false);
+    const [showUserId, setShowUserId] = useState<string | null>(null);
 
     const fetchUsers = async () => {
         try {
@@ -65,6 +68,16 @@ export default function UsersPage() {
 
     return (
         <div id="wd-account-users-page">
+            {showDetails && (
+                <PeopleDetails
+                    uid={showUserId}
+                    onClose={() => {
+                        setShowDetails(false);
+                        setShowUserId(null);
+                        fetchUsers();
+                    }}
+                />
+            )}
             <h2>Users Page</h2>
             <button onClick={createNewUser} className="float-end btn btn-danger wd-add-people mb-3">
                 <FaPlus className="me-2" />
@@ -105,7 +118,14 @@ export default function UsersPage() {
                     </thead>
                     <tbody>
                         {users.map((user: any) => (
-                            <tr key={user._id}>
+                            <tr
+                                key={user._id}
+                                onClick={() => {
+                                    setShowDetails(true);
+                                    setShowUserId(user._id);
+                                }}
+                                style={{ cursor: "pointer" }}
+                            >
                                 <td>{user.username}</td>
                                 <td>{user.firstName}</td>
                                 <td>{user.lastName}</td>
