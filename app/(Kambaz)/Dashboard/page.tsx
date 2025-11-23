@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link";
 import { FormControl, Col, Row, Card, CardImg, CardBody, CardTitle, CardText, Button } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewCourse, deleteCourse, updateCourse, setCourses,
@@ -15,15 +14,10 @@ import { RootState } from "../store";
 
 
 export default function Dashboard() {
-
-  //const { currentUser } = useSelector((state: any) => state.accountReducer);
-  //const { enrollments } = db;
-
   //the main array that holds the entire list of data
   //【global state】
   //any: tells the TypeScript compiler: "Treat this value as if it could be any possible type, and don't bother checking it."
-  const { courses, allCourses, showAllCourses } = useSelector((state: any) => state.coursesReducer
-  );
+  const { courses, allCourses, showAllCourses } = useSelector((state: any) => state.coursesReducer);
 
   //The useSelector hook receives the entire Redux store state object as its argument (the variable named 'state').
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
@@ -59,45 +53,51 @@ export default function Dashboard() {
   };
   const onAddNewCourse = async () => {
     const newCourse = await client.createCourse(course);
-    dispatch(setCourses([...courses, newCourse]));
+    //dispatch(setCourses([...courses, newCourse]));  redundant
+    await fetchCourses();
   };
   const onDeleteCourse = async (courseId: string) => {
     const status = await client.deleteCourse(courseId);
-    //不确定这样改正确不？？
-    // dispatch(setCourses(courses.filter((course) =>
-    //   course._id !== courseId)));
-    dispatch(deleteCourse(courseId))
+    //dispatch(deleteCourse(courseId))  redundant
+    await fetchCourses();
   };
   const onUpdateCourse = async () => {
-    await client.updateCourse(course);
-    //不确定这样改正确不？？
-    // dispatch(setCourses(courses.map((c) => {
-    //   if (c._id === course._id) { return course; }
-    //   else { return c; }
-    // })));
-    dispatch(updateCourse(course));
+    try {
+      const myCourses = await client.updateCourse(course);
+      dispatch(updateCourse(myCourses)); //redundant 因为fetchCourses里已经有了
+      await fetchCourses();
+      // const allCoursesData = await client.fetchAllCourses();
+      // dispatch(setAllCourses(allCoursesData));
+    } catch (error) {
+      console.error("Update failed:", error);
+    }
   };
 
 
-
-  // useEffect(() => {
-  //   fetchCourses();
-  // }, [currentUser]);
-  // Fetch enrolled courses and all courses on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const myCourses = await client.findMyCourses();
+        console.log('🔵 My Courses Response:', myCourses);
+        console.log('🔵 Type:', typeof myCourses);
+        console.log('🔵 Is Array?', Array.isArray(myCourses));
         dispatch(setCourses(myCourses));
 
         const allCoursesData = await client.fetchAllCourses();
+        console.log('🟢 All Courses Response:', allCoursesData);
+        console.log('🟢 Type:', typeof allCoursesData);
+        console.log('🟢 Is Array?', Array.isArray(allCoursesData));
+
+        const updatedCourse = allCoursesData.find((c: (any)) => c._id === 'RS101');
+        console.log('🚀 Updated course in allCourses:', updatedCourse);
+
         dispatch(setAllCourses(allCoursesData));
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   // Determine which courses to display
   const displayCourses = showAllCourses ? allCourses : courses;
@@ -109,8 +109,12 @@ export default function Dashboard() {
 
   // Handle enroll
   const handleEnroll = async (courseId: string) => {
+    if (!currentUser) {
+      console.error("No user logged in");
+      return;
+    }
     try {
-      await client.enrollInCourse(courseId);
+      await client.enrollInCourse((currentUser as any)._id, courseId);
       dispatch(enrollInCourseAction(courseId));
     } catch (error) {
       console.error("Error enrolling:", error);
@@ -120,7 +124,7 @@ export default function Dashboard() {
   // Handle unenroll
   const handleUnenroll = async (courseId: string) => {
     try {
-      await client.unenrollFromCourse(courseId);
+      await client.unenrollFromCourse((currentUser as any)._id, courseId);
       dispatch(unenrollFromCourseAction(courseId));
     } catch (error) {
       console.error("Error unenrolling:", error);

@@ -3,27 +3,29 @@
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { useSelector } from "react-redux";
+import { Nav, NavItem, NavLink } from "react-bootstrap"
+
 export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
   const pathname = usePathname();
   return (
-    <ul className="list-group">
+
+    <Nav variant="pills">
       {links.map((link) => (
-        <li
-          key={link}
-          className={`list-group-item ${pathname.includes(link.toLowerCase()) ? "active" : ""}`}
-        >
-          {/* Link to the respective path (e.g., /Account/Profile) */}
-          <Link
-            href={`/Account/${link}`}
-            className="text-decoration-none"
-          >
+        <NavItem key={link}>
+          <NavLink as={Link} href={link} id={`wd-${link.toLowerCase()}-link`} active={pathname.endsWith(link)}>
             {link}
-          </Link>
-        </li>
+          </NavLink>
+        </NavItem>
       ))}
-    </ul>
+      {currentUser && currentUser.role === "ADMIN" && (
+        <NavLink as={Link} href={`/Account/Users`} active={pathname.endsWith('Users')}> Users </NavLink>)}
+
+    </Nav>
+
+
+
   );
 }
 // import Link from "next/link";
@@ -38,4 +40,4 @@ export default function AccountNavigation() {
 
 
 //   );
-// }
+

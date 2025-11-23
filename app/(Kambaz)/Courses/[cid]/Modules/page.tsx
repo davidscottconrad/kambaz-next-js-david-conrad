@@ -16,18 +16,6 @@ import { v4 as uuidv4 } from "uuid";
 import * as coursesClient from "../../client";
 import * as moduleClient from "./client";
 
-// type Lesson = {
-//   id: string;
-//   name: string;
-// };
-
-// type Modules = {
-//   id: string;
-//   course: string;   // course id
-//   name: string;
-//   lessons?: Lesson[];
-// };
-
 export default function Modules() {
   const { cid } = useParams<{ cid: string }>();
   const [moduleName, setModuleName] = useState(""); //这些还是local state
@@ -46,12 +34,13 @@ export default function Modules() {
     dispatch(setModules([...modules, createdModule]));
   };
   const onRemoveModule = async (moduleId: string) => {
-    await moduleClient.deleteModule(moduleId);
+    await coursesClient.deleteModule(cid, moduleId);
     dispatch(deleteModule(moduleId));
   };
 
   const onUpdateModule = async (moduleData: any) => {
-    await moduleClient.updateModule(moduleData);
+    ``
+    await coursesClient.updateModule(cid, moduleData);
     const newModules = modules.map((m: any) => m._id === moduleData._id ? moduleData : m);
     dispatch(setModules(newModules));
   };
