@@ -24,8 +24,9 @@ export const findMyCourses = async () => {
 };
 
 export const createCourse = async (course: any) => {
-  const { data } = await axiosWithCredentials.post(
-    `${USERS_API}/current/courses`, course);
+  console.log('Course client: createCourse')
+  const { data } = await axiosWithCredentials.post(`${COURSES_API}`, course);
+  console.log('Course client: after posting new courses')
   return data;
 };
 export const deleteCourse = async (id: string) => {

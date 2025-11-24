@@ -35,6 +35,7 @@ export default function Assignments() {
 
   const dispatch = useDispatch();
   const { assignments } = useSelector((s: RootState) => s.assignmentReducer);
+  console.log("Assignments from Redux:", assignments);
   const fetchAssignments = async () => {
     try {
       console.log("Fetching assignments for course:", cid);
@@ -114,68 +115,61 @@ export default function Assignments() {
           </div>
         </ListGroupItem>
 
-        {assignments
-          .map((a: any) => {
-            const title = a.title ?? "(Untitled)";
-            const due = prettyDate(a.dueDate) ?? "No due date";
-            const avail = prettyDate(a.availableFrom);
-            const pts = a.points ?? 0;
-            return (
-              <Link
-                key={a._id}
-                href={`/Courses/${cid}/Assignments/${a._id}`}
-                className="text-decoration-none"
+        {Array.isArray(assignments) && assignments.map((a: any) => {
+          const name = a.name ?? "(Untitled)";
+          const due = prettyDate(a.dueDate) ?? "No due date";
+          const avail = prettyDate(a.availableFrom);
+          const pts = a.points ?? 0;
+          return (
+            <Link
+              key={a._id}
+              href={`/Courses/${cid}/Assignments/${a._id}`}
+              className="text-decoration-none"
+            >
+              <ListGroupItem
+                className="p-3 d-flex align-items-start"
+                style={{
+                  borderRight: "1px solid #000",
+                  borderBottom: "1px solid #000",
+                  borderLeft: "4px solid var(--bs-success)",
+                }}
+                action
               >
-                <ListGroupItem
-                  className="p-3 d-flex align-items-start"
-                  style={{
-                    borderRight: "1px solid #000",
-                    borderBottom: "1px solid #000",
-                    borderLeft: "4px solid var(--bs-success)",
-                  }}
-                  action
-                >
-                  <div className="wd-assign p-3 ps-1">
-                    <BsGripVertical className="me-2 fs-3" />
-                    <BsFileEarmarkText className="text-success" />
+                <div className="wd-assign p-3 ps-1">
+                  <BsGripVertical className="me-2 fs-3" />
+                  <BsFileEarmarkText className="text-success" />
+                </div>
+
+                <div className="flex-fill">
+                  <div className="fw-semibold mb-1">{name}</div>
+
+                  <div className="small mb-1">
+                    <span className="text-danger text-decoration-none">Multiple Modules</span>
+                    <span className="mx-2 text-muted">|</span>
+                    <span className="text-muted">
+                      {avail ? `Not available until ${avail}` : "Available now"}
+                      {" "}|
+                    </span>
                   </div>
 
-                  <div className="flex-fill">
-                    <div className="fw-semibold mb-1">{title}</div>
-
-                    <div className="small mb-1">
-                      <span className="text-danger text-decoration-none">Multiple Modules</span>
-                      <span className="mx-2 text-muted">|</span>
-                      <span className="text-muted">
-                        {avail ? `Not available until ${avail}` : "Available now"}
-                        {" "}|
-                      </span>
-                    </div>
-
-                    <div className="small text-muted">
-                      <span className="fw-semibold text-dark">Due</span>
-                      <span className="ms-1">{due}</span>
-                      <span className="mx-2">|</span>
-                      <span className="text-dark">{pts} pts</span>
-                    </div>
+                  <div className="small text-muted">
+                    <span className="fw-semibold text-dark">Due</span>
+                    <span className="ms-1">{due}</span>
+                    <span className="mx-2">|</span>
+                    <span className="text-dark">{pts} pts</span>
                   </div>
+                </div>
 
-                  <div className="ms-auto d-flex align-items-center">
-                    {/* <button
-                      className="btn btn-sm text-danger me-3 p-0" // me-3 for separation
-                      onClick={(e) => handleDeleteClick(a, e)} // Use the new handler
-                      aria-label={`Delete ${title}`}
-                    >
-                      <FaTrash className="fs-5" />
-                    </button> */}
-                    <AssignmentSideBtn cid={cid} assignmentId={a._id}
-                      deleteAssignment={(assignmentId) => onRemoveAssignment(assignmentId)}
-                      editAssignment={(assignmentId) => onUpdateAssignment(assignmentId)} />
-                  </div>
-                </ListGroupItem>
-              </Link>
-            );
-          })}
+                <div className="ms-auto d-flex align-items-center">
+
+                  <AssignmentSideBtn cid={cid} assignmentId={a._id}
+                    deleteAssignment={(assignmentId) => onRemoveAssignment(assignmentId)}
+                    editAssignment={(assignmentId) => onUpdateAssignment(assignmentId)} />
+                </div>
+              </ListGroupItem>
+            </Link>
+          );
+        })}
       </ListGroup>
       <Modal show={showDeleteModal} onHide={handleDeleteCancel}>
         <Modal.Header closeButton>
@@ -183,7 +177,7 @@ export default function Assignments() {
         </Modal.Header>
         <Modal.Body>
           Are you sure you want to remove assignment: <br />
-          **"{assignmentToDelete?.title || assignmentToDelete?.name || 'Untitled Assignment'}"**?
+          **"{assignmentToDelete?.name || assignmentToDelete?.name || 'Untitled Assignment'}"**?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleDeleteCancel}>

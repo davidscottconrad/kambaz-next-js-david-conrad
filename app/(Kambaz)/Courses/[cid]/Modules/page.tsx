@@ -39,10 +39,12 @@ export default function Modules() {
   };
 
   const onUpdateModule = async (moduleData: any) => {
-    ``
-    await coursesClient.updateModule(cid, moduleData);
-    const newModules = modules.map((m: any) => m._id === moduleData._id ? moduleData : m);
-    dispatch(setModules(newModules));
+    //version 1:
+    // await coursesClient.updateModule(cid, moduleData);
+    // const newModules = modules.map((m: any) => m._id === moduleData._id ? moduleData : m);
+    // dispatch(setModules(newModules));
+    const result = await coursesClient.updateModule(cid, moduleData);
+    dispatch(setModules(result));
   };
 
   const saveModule = async (moduleData: any) => {
@@ -62,20 +64,22 @@ export default function Modules() {
 
       <br /><br /><br />
       <ListGroup className="rounded-0" id="wd-modules">
-        {modules.map((moduleItem: any) => (
+        {Array.isArray(modules) && modules.map((moduleItem: any) => (
           <ListGroupItem key={moduleItem._id} className="wd-module p-0 mb-5 fs-5 border-gray">
             <div className="wd-title p-3 ps-2 bg-secondary">
               <BsGripVertical className="me-2 fs-3" />
               {!moduleItem.editing && moduleItem.name}
               {moduleItem.editing && (
                 <FormControl className="w-50 d-inline-block"
-                  onChange={(e) => onUpdateModule({ ...moduleItem, name: e.target.value })}
+                  defaultValue={moduleItem.name}
+                  onChange={(e) => setModuleName(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      onUpdateModule({ ...moduleItem, editing: false });
+                      e.preventDefault();
+                      onUpdateModule({ ...moduleItem, name: moduleName, editing: false });
                     }
                   }}
-                  defaultValue={moduleItem.name} />
+                />
               )}
               <ModuleControlButtons moduleId={moduleItem._id}
                 deleteModule={(moduleId) => onRemoveModule(moduleId)}

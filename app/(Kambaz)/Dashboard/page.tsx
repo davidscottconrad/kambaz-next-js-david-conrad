@@ -52,22 +52,36 @@ export default function Dashboard() {
     }
   };
   const onAddNewCourse = async () => {
-    const newCourse = await client.createCourse(course);
-    //dispatch(setCourses([...courses, newCourse]));  redundant
-    await fetchCourses();
+    console.log('calling onAddNewCourse in page')
+    try {
+      const status = await client.createCourse(course);
+      console.log('Add status:', status);
+      //dispatch(setCourses([...courses, newCourse]));  redundant
+      await fetchCourses();
+      const allCoursesData = await client.fetchAllCourses();
+      dispatch(setAllCourses(allCoursesData));
+    }
+    catch (error: any) {
+      console.error('❌ Create failed:', error);
+      console.error('❌ Error response:', error.response?.data);
+    }
   };
   const onDeleteCourse = async (courseId: string) => {
     const status = await client.deleteCourse(courseId);
-    //dispatch(deleteCourse(courseId))  redundant
+    console.log('Delete status:', status);
+    dispatch(deleteCourse(courseId))
     await fetchCourses();
+    const allCoursesData = await client.fetchAllCourses();
+    dispatch(setAllCourses(allCoursesData));
   };
   const onUpdateCourse = async () => {
+    //version 1: work, question: 没有“ await fetchAllCourses();”
     try {
       const myCourses = await client.updateCourse(course);
       dispatch(updateCourse(myCourses)); //redundant 因为fetchCourses里已经有了
       await fetchCourses();
-      // const allCoursesData = await client.fetchAllCourses();
-      // dispatch(setAllCourses(allCoursesData));
+      const allCoursesData = await client.fetchAllCourses();
+      dispatch(setAllCourses(allCoursesData));
     } catch (error) {
       console.error("Update failed:", error);
     }
@@ -138,7 +152,8 @@ export default function Dashboard() {
       {/* Enrollments Toggle Button */}
       <div className="d-flex justify-content-end mb-3">
         <button className="btn btn-primary float-end" id="wd-enrollments-click"
-          onClick={() => dispatch(toggleShowAllCourses())}> Enrollments </button>
+          onClick={() => dispatch(toggleShowAllCourses())}>
+          {showAllCourses ? "My Courses" : "All Courses"} </button>
       </div>
 
       <h2 id="wd-dashboard-published">

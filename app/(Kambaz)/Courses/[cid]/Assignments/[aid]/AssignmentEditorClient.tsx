@@ -27,7 +27,7 @@ export default function AssignmentEditorClient() {
   const today = dateObjectToHtmlDateString(new Date());
 
   //state for form fields:
-  const [title, setTitle] = useState(found?.title ?? "");
+  const [name, setName] = useState(found?.name ?? "");
   const [description, setDescription] = useState(""); // kept local if not persisted
   const [points, setPoints] = useState<number>(found?.points ?? 100);
   const [dueDate, setDueDate] = useState<string>(found?.dueDate ?? "");
@@ -50,7 +50,7 @@ export default function AssignmentEditorClient() {
           setAssignment(data);
 
           // Populate form fields
-          setTitle(data.title || "");
+          setName(data.name || "");
           setDescription(data.description || "");
           setPoints(data.points || 100);
           setDueDate(data.dueDate || "");
@@ -70,7 +70,7 @@ export default function AssignmentEditorClient() {
 
   const handleSave = async () => {
     const payload = {
-      title,
+      name,
       description,
       points,
       dueDate,
@@ -106,7 +106,7 @@ export default function AssignmentEditorClient() {
       {/* Title */}
       <Form.Group className="mb-3">
         <Form.Label>Assignment Name</Form.Label>
-        <Form.Control value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Form.Control value={name} onChange={(e) => setName(e.target.value)} />
       </Form.Group>
 
       {/* (Optional) Description - not persisted in this slice, keep local or add to slice if needed */}
