@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { FaUserCircle, FaCheck } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";

@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 //import { courses } from "../../Database";
 import { FaAlignJustify } from "react-icons/fa";
 import { useParams, useLocation } from "react-router";
