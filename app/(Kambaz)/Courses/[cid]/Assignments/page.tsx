@@ -17,18 +17,6 @@ import { RootState } from "../../../store"
 import * as coursesClient from "../../client";
 import * as assignmentClient from "./client";
 
-
-
-// type AssignmentType = {
-//   _id: string;
-//   course: string | number;
-//   title?: string;
-//   name?: string;
-//   points?: number;
-//   dueDate?: string;
-//   availableFrom?: string;
-//   until?: string;
-// };
 export default function Assignments() {
   const { cid } = useParams() as { cid: string };
   const [assignmentName, setAssignmentName] = useState("");
@@ -90,9 +78,9 @@ export default function Assignments() {
     setShowDeleteModal(true);
   };
   const onUpdateAssignment = async (assignment: any) => {
-    await assignmentClient.updateAssignment(assignment);
-    const newAssignment = assignment.map((a: any) => a._id === assignment._id ? assignment : a);
-    dispatch(setAssignment(newAssignment));
+    const result = await coursesClient.updateAssignment(cid, assignment);
+    //const newAssignment = assignment.map((a: any) => a._id === assignment._id ? assignment : a);
+    dispatch(setAssignment(result));
   };
   const saveAssignment = async (assignment: any) => {
     await assignmentClient.updateAssignment(assignment);

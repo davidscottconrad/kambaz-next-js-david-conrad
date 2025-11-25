@@ -7,7 +7,7 @@ import { BsCalendarEvent } from "react-icons/bs";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { updateAssignment, addAssignment } from "../reducer";
+import { updateAssignment, addAssignment, setAssignment } from "../reducer";
 import { dateObjectToHtmlDateString } from "../../../../utils/dateUtils";
 import * as assignmentClient from "../client";
 import * as coursesClient from "../../../client";
@@ -17,13 +17,14 @@ export default function AssignmentEditorClient() {
   const { cid, aid } = useParams() as { cid: string; aid: string };
   const router = useRouter();
   const dispatch = useDispatch();
-  const[assignment, setAssignment] = useState<any>(null);
+  const[assignmentName, setAssignmentName] = useState<any>(null);
   const[loading, setLoading] = useState(true);
   const { assignments } = useSelector((s: any) => s.assignmentReducer) as { assignments: any };
 
+  //是不是用client.find 更好？
+  //const modules = await coursesClient.findModulesForCourse(cid as string);
   const found = assignments.find((a: any) => String(a.course) === String(cid) && a._id === aid);
-  const isNew = !found || aid === "new";
-  // initialize blank/new with today as examples (not hardcoded constants)
+  const isNew =  aid === "new";
   const today = dateObjectToHtmlDateString(new Date());
 
   //state for form fields:
@@ -33,22 +34,20 @@ export default function AssignmentEditorClient() {
   const [dueDate, setDueDate] = useState<string>(found?.dueDate ?? "");
   const [availableFrom, setAvailableFrom] = useState<string>(found?.availableFrom ?? "");
   const [until, setUntil] = useState<string>(found?.until ?? "");
-  //const payload = { title, points, dueDate, availableFrom, until, course: cid };
   
   // Fetch assignment data if editing existing
   useEffect(() => {
     const fetchAssignment = async () => {
-      if (isNew) {
-        // Set defaults for new assignment
-        setDueDate(today);
-        setAvailableFrom(today);
-        setLoading(false);
-      } else {
+      // if (isNew) {
+      //   // Set defaults for new assignment
+      //   setDueDate(today);
+      //   setAvailableFrom(today);
+      //   setLoading(false);
+      // } else {
         try {
           // Fetch the assignment by ID
           const data = await assignmentClient.findAssignmentById(aid);
           setAssignment(data);
-
           // Populate form fields
           setName(data.name || "");
           setDescription(data.description || "");
@@ -56,20 +55,21 @@ export default function AssignmentEditorClient() {
           setDueDate(data.dueDate || "");
           setAvailableFrom(data.availableFrom || "");
           setUntil(data.until || "");
-
           setLoading(false);
         } catch (error) {
           console.error("Error fetching assignment:", error);
           setLoading(false);
         }
-      }
+      
     };
     fetchAssignment();
   }, [aid, isNew, today]);
 
 
   const handleSave = async () => {
+    const isNew = aid === "new";
     const payload = {
+      _id: aid, 
       name,
       description,
       points,
@@ -78,18 +78,21 @@ export default function AssignmentEditorClient() {
       until,
       course: cid
     };
-    // Add console.log HERE to debug
+   
     console.log('=== DEBUG handleSave ===');
     console.log('isNew:', isNew);
-    console.log('aid:', aid);
+    console.log('aid Value:', aid);
+    console.log("aid TYPE:", typeof aid);
     console.log('cid:', cid);
     console.log('payload:', payload);
 
     if (isNew) {
       const created = await coursesClient.createAssignmentForCourse(cid, payload);
-      dispatch(addAssignment(created));
+      console.log('Created assignment _id:', created._id);
+      console.log('_id type:', typeof created._id);
+      dispatch(setAssignment([...assignments, created]));
     } else {
-      const updated = await assignmentClient.updateAssignment({ ...payload, _id: aid });
+      const updated = await coursesClient.updateAssignment( cid, payload );
       dispatch(updateAssignment(updated));
     }
     router.push(`/Courses/${cid}/Assignments`);
@@ -98,9 +101,7 @@ export default function AssignmentEditorClient() {
   if (loading) {
     return <div className="p-4">Loading...</div>;
   }
-    
   
-
   return (
     <div className="p-4">
       {/* Title */}

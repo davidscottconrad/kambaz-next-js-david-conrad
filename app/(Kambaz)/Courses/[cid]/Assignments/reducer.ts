@@ -1,36 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { assignments, courses } from "../../../Database";
+
 import { v4 as uuidv4 } from "uuid";
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
-import { assignments as dbAssignments } from "../../../Database";
-import { act } from "react";
 
-
-// export type Assignment = {
-//   _id: string;
-//   course: string;           // keep as string for routing
-//   title: string;            // normalized (fallback from legacy name)
-//   name?: string;
-//   points: number;
-//   dueDate?: string;         // "YYYY-MM-DD"
-//   availableFrom?: string;   // "YYYY-MM-DD"
-//   until?: string;           // "YYYY-MM-DD"
-//   editing?: boolean;
-// };
-
-// const normalize = (a: any): Assignment => ({
-//   _id: String(a._id ?? nanoid()),
-//   course: String(a.course ?? ""),
-//   title: String(a.title ?? a.name ?? "(Untitled)"),
-//   points: Number(a.points ?? 100),
-//   dueDate: a.dueDate ? String(a.dueDate) : undefined,
-//   availableFrom: a.availableFrom ? String(a.availableFrom) : undefined,
-//   until: a.until ? String(a.until) : undefined,
-// });
-
-// const initialState: { assignments: Assignment[] } = {
-//   assignments: (dbAssignments ?? []).map(normalize),
-// };
 const initialState = {
   assignments: [] as any[],
 };
@@ -39,8 +11,9 @@ const assignmentsSlice = createSlice({
   initialState,
   reducers: {
     addAssignment: (state, {payload: assignment}) => {
+      console.log('-----Assignment Reducer----')
       const newAssignment: any = {
-        _id:uuidv4,
+        _id:uuidv4(),
         name: assignment.name,
         course: assignment.course,
         points: assignment.points,

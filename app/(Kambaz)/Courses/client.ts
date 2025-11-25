@@ -80,7 +80,10 @@ export const findAssignmentsForCourse = async (courseId: string) => {
 };
 
 export const createAssignmentForCourse = async (courseId: string, assignment: any) => {  
+  console.log('📤 Client sending assignment:', assignment);
+  console.log('course id: ', courseId);
   const response = await axios.post(`${COURSES_API}/${courseId}/assignments`, assignment);
+  console.log('📥 Client received:', response);
   return response.data;
 };
 
@@ -90,8 +93,11 @@ export const deleteAssignment = async (assignmentId: string) => {
     return response.data;
 }
 
-export const updateAssignment = async (assignment: any) => {
-  const { data } = await axios.put(`${ASSIGNMENTS_API}/${assignment._id}`,assignment);
+export const updateAssignment = async (courseId: string, assignment: any) => {
+  console.log('📤 Course Client updating assignment:', assignment._id);
+  console.log('course id: ', courseId);
+  const { data } = await axios.put(`${COURSES_API}/${courseId}/assignments/${assignment._id}`,assignment);
+  console.log('📤 Client sent update assignment');
   return data;
 };
 

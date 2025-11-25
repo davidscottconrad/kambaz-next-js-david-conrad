@@ -259,7 +259,7 @@ export default function Dashboard() {
               </Col>
             ))}
         </Row>
-      </div></div>);
+      </div></div >);
 }
 
 
