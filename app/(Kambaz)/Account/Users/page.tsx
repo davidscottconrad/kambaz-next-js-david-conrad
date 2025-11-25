@@ -26,6 +26,7 @@ export default function Users() {
             section: "S101",
             role: "STUDENT",
         });
+        console.log('After create User: ', user.firstName);
         setUsers([...users, user]);
     };
 
