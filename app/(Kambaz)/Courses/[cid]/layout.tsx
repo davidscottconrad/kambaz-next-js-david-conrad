@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { ReactNode } from "react";
 import CourseNavigation from "./Navigation";
 import * as Fa from 'react-icons/fa';
-import { courses } from "../../Database";
+
 
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();//allows your component to read dynamic parameters embedded directly in the current URL
