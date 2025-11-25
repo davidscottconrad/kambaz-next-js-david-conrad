@@ -30,6 +30,7 @@ export const createCourse = async (course: any) => {
   return data;
 };
 export const deleteCourse = async (id: string) => {
+  console.log('course client deleteCourse');
   const { data } = await axios.delete(`${COURSES_API}/${id}`);
   return data;
 };
@@ -87,9 +88,8 @@ export const createAssignmentForCourse = async (courseId: string, assignment: an
   return response.data;
 };
 
-const ASSIGNMENTS_API = `${HTTP_SERVER}/api/assignments`;
-export const deleteAssignment = async (assignmentId: string) => {
-    const response = await axios.delete(`${ASSIGNMENTS_API}/${assignmentId}`);
+export const deleteAssignment = async (courseId: string, assignmentId: string) => {
+    const response = await axios.delete(`${COURSES_API}/${courseId}/assignments/${assignmentId}`);
     return response.data;
 }
 

@@ -72,7 +72,8 @@ export default function Assignments() {
     dispatch(setAssignment([...assignments, assignment]));
   };
   const onRemoveAssignment = async (assignmentId: string) => {
-    await assignmentClient.deleteAssignment(assignmentId);
+    console.log('----Page onRemoveAssignment---')
+    await coursesClient.deleteAssignment(cid, assignmentId);
     const newAssignment = assignments.filter((a: any) => a._id !== assignmentId)
     dispatch(setAssignment(newAssignment));
     setShowDeleteModal(true);

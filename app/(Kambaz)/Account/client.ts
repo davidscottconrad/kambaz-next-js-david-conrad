@@ -21,7 +21,9 @@ export const signup = async (user: any) => {
   return response.data;
 };
 export const updateUser = async (user: any) => {
+  console.log('---Account Client updateUser');
   const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
+  console.log('---Account Client Successful Updated User');
   return response.data;
 };
 export const signout = async () => {

@@ -7,23 +7,28 @@ import * as client from "../../../Account/client";
 import { FaPencil } from "react-icons/fa6";
 import { FormControl } from "react-bootstrap";
 
+
 export default function PeopleDetails({ uid, onClose }:
     { uid: string | null; onClose: () => void; }) {
     const [user, setUser] = useState<any>({});
     const [name, setName] = useState("");
     const [editing, setEditing] = useState(false);
     const saveUser = async () => {
-        const [firstName, lastName] = name.split(" ");
+        const parts = name.trim().split(" ");
+        const firstName = parts[0] ?? "";
+        const lastName = parts.slice(1).join(" ") || user.lastName;
         const updatedUser = { ...user, firstName, lastName };
-        await client.updateUser(updatedUser);
-        setUser(updatedUser);
+        const savedUser = await client.updateUser(updatedUser);
+        setUser(savedUser);
         setEditing(false);
         onClose();
     };
     const fetchUser = async () => {
         if (!uid) return;
-        const user = await client.findUserById(uid);
-        setUser(user);
+        console.log("[PeopleDetails] fetching user for uid:", uid);
+        const userFromClient = await client.findUserById(uid);
+        console.log("[PeopleDetails] userFromClient =", userFromClient);
+        setUser(userFromClient);
     };
     useEffect(() => {
         if (uid) fetchUser();
@@ -34,8 +39,6 @@ export default function PeopleDetails({ uid, onClose }:
         await client.deleteUser(uid);
         onClose();
     };
-
-
 
     return (
         <div className="wd-people-details position-fixed top-0
