@@ -1,7 +1,7 @@
 "use client"
 import { ReactNode } from "react";
 import TOC from "./TOC";
-import store from "./store";
+import store from "./Lab4/store";
 import { Provider } from "react-redux";
 
 export default function LabsLayout({ children }:

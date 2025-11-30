@@ -1,5 +1,5 @@
-export default function Modules() {
+export default function Piazza() {
   return (
-    <h4>Piazza</h4> 
+    <h4>Piazza</h4>
   )
 }
