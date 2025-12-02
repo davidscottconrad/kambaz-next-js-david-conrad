@@ -6,12 +6,13 @@ import GreenCheckmark from "../Modules/GreenCheckmark";
 import { BsBan } from "react-icons/bs";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import * as quizClient from "./client";
 
 
 type QuizSideBtnProps = {
     qid: string;
-    initialPublished?: boolean;              // default: unpublished
-    onDelete?: () => void;
+    initialPublished?: boolean;
+    onDelete?: (quizId: string) => Promise<void>;
     onPublishChange?: (published: boolean) => void;
 };
 
@@ -39,7 +40,7 @@ IconToggle.displayName = "IconToggle";
 
 export default function QuizSideBtn({
     qid,
-    initialPublished = false,
+    initialPublished,
     onDelete,
     onPublishChange
 }: QuizSideBtnProps) {
@@ -50,11 +51,16 @@ export default function QuizSideBtn({
         e.preventDefault();
         e.stopPropagation();
     };
-    const togglePublish = (e: MouseEvent) => {
+    const togglePublish = async (e: MouseEvent) => {
         stop(e);
         const next = !published;
-        setPublished(next);
-        onPublishChange?.(next);
+        try {
+            await quizClient.updateQuizPublishStatus(qid, next);
+            setPublished(next);
+            onPublishChange?.(next);
+        } catch (error) {
+            console.error("Failed to update publish status:", error);
+        }
     };
     return (
         <div className="ms-auto d-flex align-items-center gap-3" onClick={stop}>
@@ -70,7 +76,7 @@ export default function QuizSideBtn({
                     <Link href={`/Courses/${cid}/Quizzes/${qid}/QuizEditor`}>
                         <Dropdown.Item as="button" >Edit</Dropdown.Item>
                     </Link>
-                    <Dropdown.Item onClick={onDelete}>Delete</Dropdown.Item>
+                    <Dropdown.Item onClick={() => onDelete?.(qid)}>Delete</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={togglePublish}>
                         {published ? "Unpublish" : "Publish"}
@@ -81,49 +87,3 @@ export default function QuizSideBtn({
     );
 }
 
-
-
-// type Props = {
-//     initialPublished?: boolean;
-//     onEdit?: () => void;
-//     onDelete?: () => void;
-//     onPublishChange?: (published: boolean) => void;
-// };
-
-// export default function AssignmentSideBtn({
-//     initialPublished = false,
-//     onEdit,
-//     onDelete,
-//     onPublishChange,
-// }: Props) {
-//     const [published, setPublished] = useState(initialPublished);
-
-//     const togglePublish = () => {
-//         const next = !published;
-//         setPublished(next);
-//         onPublishChange?.(next);
-//     };
-//     return (
-//         <div className="float-end d-flex align-items-center gap-4">
-//             <GreenCheckmark />
-//             <Dropdown align="end">
-//                 <Dropdown.Toggle
-//                     variant="link"
-//                     className="p-0 border-0 text-body"
-//                     id="assignment-actions"
-//                 >
-//                     <IoEllipsisVertical className="fs-4" />
-//                 </Dropdown.Toggle>
-
-//                 <Dropdown.Menu>
-//                     <Dropdown.Item onClick={onEdit}>Edit</Dropdown.Item>
-//                     <Dropdown.Item onClick={onDelete}>Delete</Dropdown.Item>
-//                     <Dropdown.Divider />
-//                     <Dropdown.Item onClick={togglePublish}>
-//                         {published ? "Unpublish" : "Publish"}
-//                     </Dropdown.Item>
-//                 </Dropdown.Menu>
-//             </Dropdown>
-//         </div>
-//     );
-// }

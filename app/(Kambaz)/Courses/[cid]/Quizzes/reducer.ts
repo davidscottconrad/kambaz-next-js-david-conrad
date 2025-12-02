@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
-import { quizzes } from "../../../Database";
-
+import { v4 as uuidv4 } from "uuid";
 export type Quiz = { //还没有更新内容
   _id: string;
   course: string;           // keep as string for routing
@@ -25,85 +24,39 @@ export type Quiz = { //还没有更新内容
   lockQuestionAfterAsnwering?:string;
   published?: boolean;
 };
-
-const normalize = (q: any): Quiz => ({
-  _id: String(q._id ?? nanoid()),
-  course: String(q.course ?? ""),
-  title: String(q.title ?? q.name ?? "(Untitled)"),
-  points: Number(q.points ?? 100),
-  dueDate: q.dueDate ? String(q.dueDate) : undefined,
-  availableFrom: q.availableFrom ? String(q.availableFrom) : undefined,
-  until: q.until ? String(q.until) : undefined,
-});
-
-const initialState: { quizzes: Quiz[] } = {
-  quizzes: (quizzes ?? []).map(normalize),
-};
-
+const initialState = { quizzes: [],};
 const quizzesSlice = createSlice({
-  name: "assignments",
+  name: "quizzes",
   initialState,
   reducers: {
-    addQuiz: (
-      state,
-      { payload }: PayloadAction<Partial<Quiz> & { course: string }>
-    ) => {
-      const newQuiz: Quiz = {
-        _id: payload._id ?? nanoid(),
-        course: String(payload.course),
-        title: String(payload.title ?? payload['name'] ?? "(Untitled)"),
-        points: Number(payload.points ?? 100),
-        dueDate: payload.dueDate,
-        availableFrom: payload.availableFrom,
-        until: payload.until,
+    setQuiz: (state, action) => {
+      state.quizzes = action.payload;
+    },
+    addQuiz: (state, { payload: quiz }) => {
+      const newQuiz: any = {
+        _id: uuidv4(),
+        name: quiz.name,
+        course: quiz.course,
       };
-      state.quizzes.push(newQuiz);
+      state.quizzes = [...state.quizzes, newQuiz] as any;
     },
-
-    // partial merge update to avoid wiping fields not included by the editor
-    updateQuiz: (
-      state,
-      { payload }: PayloadAction<{ _id: string; changes: Partial<Quiz> }>
-    ) => {
-      state.quizzes = state.quizzes.map((q) =>
-        q._id === payload._id
-          ? {
-              ...q,
-              ...payload.changes,
-              title:
-                payload.changes.title !== undefined
-                  ? String(payload.changes.title)
-                  : q.title,
-               published:
-                payload.changes.published !== undefined
-                  ? Boolean(payload.changes.published)
-                  : q.published,
-              points:
-                payload.changes.points !== undefined
-                  ? Number(payload.changes.points)
-                  : q.points,
-              course:
-                payload.changes.course !== undefined
-                  ? String(payload.changes.course)
-                  : q.course,
-            }
-          : q
-      );
+    deleteQuiz: (state, { payload: quizId }) => {
+      state.quizzes = state.quizzes.filter((q: any) => q._id !== quizId);
     },
-
-    deleteQuiz: (state, { payload: quizId }: PayloadAction<string>) => {
-      state.quizzes = state.quizzes.filter((q) => q._id !== quizId);
+    updateQuiz: (state, { payload: quiz }) => {
+      state.quizzes = state.quizzes.map((q: any) =>
+        q._id === quiz._id ? quiz : q
+      ) as any;
     },
-
-    editQuiz: (state, { payload: quizId }: PayloadAction<string>) => {
-      state.quizzes = state.quizzes.map((q) =>
+    editQuiz: (state, { payload: quizId }) => {
+      state.quizzes = state.quizzes.map((q: any) =>
         q._id === quizId ? { ...q, editing: true } : q
-      );
+      ) as any;
     },
   },
 });
 
-export const { addQuiz, updateQuiz, deleteQuiz, editQuiz } =
+export const { setQuiz, addQuiz, updateQuiz, deleteQuiz, editQuiz } =
   quizzesSlice.actions;
 
 export default quizzesSlice.reducer;

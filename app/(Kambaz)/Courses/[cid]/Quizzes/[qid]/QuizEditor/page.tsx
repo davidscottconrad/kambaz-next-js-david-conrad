@@ -9,21 +9,25 @@ import { useEffect, useState } from "react";
 import { updateQuiz, addQuiz, Quiz } from "../../reducer";
 import Questions from "./Questions";
 import TrueFalse from "./TrueFalse";
+import * as coursesClient from "../../../../client"
+import * as quizClient from "../../client"
 
 
 export default function QuizEditor() {
     const { cid, qid } = useParams() as { cid: string; qid: string };
+    console.log('URL params:', { cid, qid });
     const router = useRouter();
     const dispatch = useDispatch();
     const { quizzes } = useSelector((s: any) => s.quizReducer) as { quizzes: Quiz[] };
 
-    const found = quizzes.find((a) => String(a.course) === String(cid) && a._id === qid);
+    const found = quizzes.find((q) => q._id === qid);
+    console.log("found == ", found);
     const isNew = !found || qid === "new";
-
 
     const today = new Date().toISOString().split("T")[0];
 
     const [title, setTitle] = useState(found?.title ?? "");
+    const [description, setDescription] = useState("");
     const [type, setType] = useState(found?.type ?? "Graded Quiz");
     const [timeLimit, setTimeLimit] = useState<number>(found?.timeLimit ?? 20);
     const [multipleAttempts, setMultipleAttempts] = useState(found?.multipleAttempts ?? "No");
@@ -39,6 +43,7 @@ export default function QuizEditor() {
     const [dueDate, setDueDate] = useState<string>(found?.dueDate ?? today);
     const [availableFrom, setAvailableFrom] = useState<string>(found?.availableFrom ?? today);
     const [until, setUntil] = useState<string>(found?.until ?? today);
+    const [published, setPublished] = useState<boolean>(found?.published ?? false);
 
 
     useEffect(() => {
@@ -48,10 +53,11 @@ export default function QuizEditor() {
         }
     }, [isNew, today]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const payload = {
             course: cid,
             title: title.trim() || "(Untitled)",
+            description: description,
             points,
             dueDate: dueDate || undefined,
             availableFrom: availableFrom || undefined,
@@ -67,14 +73,58 @@ export default function QuizEditor() {
             oneQuestionAtATime,
             webcamRequired,
             lockQuestionAfterAsnwering,
+            published
+        };
+        try {
+            console.log('💾 Saving quiz:', payload);
+            if (isNew) {
+                const created = await coursesClient.createQuizForCourse(cid, payload);
+                //dispatch(addQuiz(payload as any));
+                console.log('✅ Quiz created:', created);
+            } else {
+                const updated = await quizClient.updateQuiz(cid, { ...payload, _id: qid });
+                console.log('new Name: ', title);
+                //dispatch(updateQuiz({ _id: qid, changes: payload } as any));
+                console.log('✅ Quiz updated:', updated);
+            }
+            router.push(`/Courses/${cid}/Quizzes/${qid}`);
+        }
+        catch (error) {
+            console.error('❌ Failed to save quiz:', error);
+        }
+    };
+    const handleSaveAndPublish = async () => {
+        const payload = {
+            course: cid,
+            title: title.trim() || "(Untitled)",
+            description: description,
+            points,
+            dueDate: dueDate || undefined,
+            availableFrom: availableFrom || undefined,
+            until: until || undefined,
+            type,
+            timeLimit,
+            multipleAttempts,
+            assignmentGroup,
+            shuffleAnswer,
+            showCorrectAnswers,
+            accessCode,
+            oneQuestionAtATime,
+            webcamRequired,
+            lockQuestionAfterAsnwering,
+            published: true,
         };
 
-        if (isNew) {
-            dispatch(addQuiz(payload as any));
-        } else {
-            dispatch(updateQuiz({ _id: qid, changes: payload } as any));
+        try {
+            if (isNew) {
+                await coursesClient.createQuizForCourse(cid, payload);
+            } else {
+                await coursesClient.updateQuiz(cid, { ...payload, _id: qid });
+            }
+            router.push(`/Courses/${cid}/Quizzes`);
+        } catch (error) {
+            console.error('Failed to save and publish quiz:', error);
         }
-        router.push(`/Courses/${cid}/Quizzes`);
     };
 
     return (
@@ -90,6 +140,20 @@ export default function QuizEditor() {
                                 value={title}
                                 placeholder="Quiz title"
                                 onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    {/* Description */}
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm={2}>Description</Form.Label>
+                        <Col sm={5}>
+                            <Form.Control
+                                as="textarea"
+                                rows={4}
+                                value={description}
+                                placeholder="Quiz description"
+                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
@@ -270,6 +334,7 @@ export default function QuizEditor() {
                     <div className="d-flex gap-2 mt-4">
                         <Link href={`/Courses/${cid}/Quizzes`} className="btn btn-secondary">Cancel</Link>
                         <button type="button" className="btn btn-danger" onClick={handleSave}>Save</button>
+                        <button type="button" className="btn btn-success" onClick={handleSaveAndPublish}> Save & Publish</button>
                     </div>
                 </Tab>
 

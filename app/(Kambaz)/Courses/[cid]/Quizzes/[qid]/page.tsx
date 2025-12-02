@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import QuizEditorClient from "./QuizEditorClient";
+import QuizDetails from "./QuizDetails";
 export default function Page({ params }: { params: { cid: string; aid: string } }) {
-    return <QuizEditorClient />;
+    return <QuizDetails />;
 }

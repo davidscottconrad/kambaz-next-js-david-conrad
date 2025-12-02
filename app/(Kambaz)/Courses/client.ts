@@ -63,7 +63,6 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
   return response.data;
 };
 
-const MODULES_API = `${HTTP_SERVER}/api/modules`;
 export const deleteModule = async (courseId: string,moduleId: string) => {
   const response = await axios.delete(`${COURSES_API}/${courseId}/modules/${moduleId}`);
   //const response = await axios.delete(`${MODULES_API}/${moduleId}`);
@@ -100,6 +99,28 @@ export const updateAssignment = async (courseId: string, assignment: any) => {
   console.log('📤 Client sent update assignment');
   return data;
 };
+
+export const createQuizForCourse = async (courseId: string, quiz: any) => {  
+  console.log('📤 Client creating quiz:', quiz);
+  console.log('course id: ', courseId);
+  const response = await axios.post(`${COURSES_API}/${courseId}/quizzes`, quiz);
+  console.log('📥 Client received:', response);
+  return response.data;
+};
+export const deleteQuiz = async (courseId: string,quizId: string) => {
+  const response = await axios.delete(`${COURSES_API}/${courseId}/quizzes/${quizId}`);
+    return response.data;
+}
+export const updateQuiz = async (courseId: string, quiz: any) => {
+  const { data } = await axios.put(`${COURSES_API}/${courseId}/quizzes/${quiz._id}`,quiz);
+  return data;
+};
+
+export const findQuizzesForCourse = async (courseId: string) => {
+  const response = await axios.get(`${COURSES_API}/${courseId}/quizzes`);
+  return response.data;
+};
+
 
 
 
