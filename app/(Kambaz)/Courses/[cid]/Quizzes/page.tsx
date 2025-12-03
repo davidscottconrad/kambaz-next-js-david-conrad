@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QuizzesControls from "./QuizzesControls";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { useParams } from "next/navigation";
